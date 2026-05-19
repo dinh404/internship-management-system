@@ -7,31 +7,26 @@ public class TinTuyenDungService {
     private List<TinTuyenDung> danhSach = new ArrayList<>();
 
     public TinTuyenDungService() {
-        // Dữ liệu mẫu
-        danhSach.add(new TinTuyenDung("TD001", "Thực tập Java Developer", 
-            "Phát triển ứng dụng Java Spring Boot", "Java, Spring Boot, MySQL, Git", 
-            5, "30/06/2026", "DN001", "Đang mở"));
-        
-        danhSach.add(new TinTuyenDung("TD002", "Thực tập Frontend React", 
-            "Xây dựng giao diện website hiện đại", "ReactJS, HTML5, CSS3, JavaScript", 
-            3, "15/07/2026", "DN002", "Đang mở"));
-        
-        danhSach.add(new TinTuyenDung("TD003", "Thực tập Data Analyst", 
-            "Phân tích và trực quan hóa dữ liệu", "Python, SQL, Power BI, Excel", 
-            2, "20/06/2026", "DN001", "Đã đóng"));
+        // Dữ liệu mẫu mới (theo yêu cầu)
+        danhSach.add(new TinTuyenDung("TD001", "Java Developer", "Công ty ABC", 
+            "TP.HCM", 5, "30/06/2026", "Đang mở"));
+        danhSach.add(new TinTuyenDung("TD002", "Frontend React", "Công ty XYZ", 
+            "Hà Nội", 3, "15/07/2026", "Đang mở"));
+        danhSach.add(new TinTuyenDung("TD003", "Data Analyst", "Công ty MNO", 
+            "Đà Nẵng", 2, "20/06/2026", "Đã đóng"));
     }
 
     public List<TinTuyenDung> getAll() {
         return new ArrayList<>(danhSach);
     }
 
-    public boolean them(TinTuyenDung td) {
+    public boolean add(TinTuyenDung td) {
         if (getByMa(td.getMaTinTuyenDung()) != null) return false;
         danhSach.add(td);
         return true;
     }
 
-    public boolean sua(TinTuyenDung td) {
+    public boolean update(TinTuyenDung td) {
         for (int i = 0; i < danhSach.size(); i++) {
             if (danhSach.get(i).getMaTinTuyenDung().equals(td.getMaTinTuyenDung())) {
                 danhSach.set(i, td);
@@ -41,21 +36,21 @@ public class TinTuyenDungService {
         return false;
     }
 
-    public boolean xoa(String ma) {
+    public boolean delete(String ma) {
         return danhSach.removeIf(td -> td.getMaTinTuyenDung().equals(ma));
     }
 
-    public List<TinTuyenDung> timKiem(String tuKhoa) {
-        List<TinTuyenDung> ketQua = new ArrayList<>();
-        String kw = tuKhoa.toLowerCase().trim();
+    public List<TinTuyenDung> search(String keyword) {
+        List<TinTuyenDung> result = new ArrayList<>();
+        String kw = keyword.toLowerCase().trim();
         for (TinTuyenDung td : danhSach) {
             if (td.getMaTinTuyenDung().toLowerCase().contains(kw) ||
-                td.getTieuDe().toLowerCase().contains(kw) ||
-                td.getMaDoanhNghiep().toLowerCase().contains(kw)) {
-                ketQua.add(td);
+                td.getTenViTri().toLowerCase().contains(kw) ||
+                td.getTenDoanhNghiep().toLowerCase().contains(kw)) {
+                result.add(td);
             }
         }
-        return ketQua;
+        return result;
     }
 
     public TinTuyenDung getByMa(String ma) {
