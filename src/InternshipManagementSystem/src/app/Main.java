@@ -1,9 +1,14 @@
 package app;
 
-import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import view.LoginFrame;
 
 public class Main {
+
     public static void main(String[] args) {
-        JOptionPane.showMessageDialog(null, "Project Java Swing khởi động thành công!");
+        SwingUtilities.invokeLater(() -> {
+            LoginFrame loginFrame = new LoginFrame();
+            loginFrame.setVisible(true);
+        });
     }
 }

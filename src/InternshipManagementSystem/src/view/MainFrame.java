@@ -30,21 +30,100 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        btnSinhVien = new javax.swing.JButton();
+        btnTinTuyenDung = new javax.swing.JButton();
+        btnUngTuyen = new javax.swing.JButton();
+        btnBaoCao = new javax.swing.JButton();
+        btnDangXuat = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("HỆ THỐNG QUẢN LÝ THỰC TẬP VÀ KẾT NỐI DOANH NGHIỆP");
+
+        btnSinhVien.setText("Quản lý sinh viên");
+        btnSinhVien.addActionListener(this::btnSinhVienActionPerformed);
+
+        btnTinTuyenDung.setText("Quản lý tin tuyển dụng");
+        btnTinTuyenDung.addActionListener(this::btnTinTuyenDungActionPerformed);
+
+        btnUngTuyen.setText("Quản lý ứng tuyển");
+        btnUngTuyen.addActionListener(this::btnUngTuyenActionPerformed);
+
+        btnBaoCao.setText("Báo cáo thống kê");
+        btnBaoCao.addActionListener(this::btnBaoCaoActionPerformed);
+
+        btnDangXuat.setText("Đăng xuất");
+        btnDangXuat.addActionListener(this::btnDangXuatActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnDangXuat)
+                            .addComponent(btnBaoCao)
+                            .addComponent(btnUngTuyen)
+                            .addComponent(btnTinTuyenDung)
+                            .addComponent(btnSinhVien))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(btnSinhVien)
+                .addGap(18, 18, 18)
+                .addComponent(btnTinTuyenDung)
+                .addGap(18, 18, 18)
+                .addComponent(btnUngTuyen)
+                .addGap(28, 28, 28)
+                .addComponent(btnBaoCao)
+                .addGap(28, 28, 28)
+                .addComponent(btnDangXuat)
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSinhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSinhVienActionPerformed
+        SinhVienFrame sinhVienFrame = new SinhVienFrame();
+        sinhVienFrame.setVisible(true);
+    }//GEN-LAST:event_btnSinhVienActionPerformed
+
+    private void btnDangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangXuatActionPerformed
+        boolean confirm = util.MessageUtil.showConfirm(this, "Bạn có chắc chắn muốn đăng xuất?");
+
+        if (confirm) {
+            LoginFrame loginFrame = new LoginFrame();
+            loginFrame.setVisible(true);
+            this.dispose();
+}
+    }//GEN-LAST:event_btnDangXuatActionPerformed
+
+    private void btnTinTuyenDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTinTuyenDungActionPerformed
+        TinTuyenDungFrame frame = new TinTuyenDungFrame();
+        frame.setVisible(true);
+    }//GEN-LAST:event_btnTinTuyenDungActionPerformed
+
+    private void btnUngTuyenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUngTuyenActionPerformed
+        UngTuyenFrame frame = new UngTuyenFrame();
+        frame.setVisible(true);
+    }//GEN-LAST:event_btnUngTuyenActionPerformed
+
+    private void btnBaoCaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBaoCaoActionPerformed
+        BaoCaoFrame frame = new BaoCaoFrame();
+        frame.setVisible(true);
+    }//GEN-LAST:event_btnBaoCaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -72,5 +151,11 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBaoCao;
+    private javax.swing.JButton btnDangXuat;
+    private javax.swing.JButton btnSinhVien;
+    private javax.swing.JButton btnTinTuyenDung;
+    private javax.swing.JButton btnUngTuyen;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
