@@ -1,5 +1,14 @@
 package service;
 
 public class AuthService {
-    // TODO: Xử lý đăng nhập, đăng xuất và phân quyền người dùng
+
+    public boolean login(String username, String password) {
+        if (username == null || password == null) {
+            return false;
+        }
+
+        username = username.trim();
+
+        return username.equals("admin") && password.equals("123456");
+    }
 }

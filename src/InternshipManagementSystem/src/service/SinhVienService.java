@@ -1,5 +1,18 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.List;
+import model.SinhVien;
+
 public class SinhVienService {
-    // TODO: Xử lý nghiệp vụ liên quan đến sinh viên
+
+    private final List<SinhVien> danhSachSinhVien;
+
+    public SinhVienService() {
+        danhSachSinhVien = new ArrayList<>();
+    }
+
+    public List<SinhVien> getAll() {
+        return danhSachSinhVien;
+    }
 }
