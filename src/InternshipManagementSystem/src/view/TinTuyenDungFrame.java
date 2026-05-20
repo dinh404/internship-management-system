@@ -14,13 +14,13 @@ public class TinTuyenDungFrame extends JFrame {
     private TinTuyenDungService service = new TinTuyenDungService();
     private DefaultTableModel tableModel;
     private JTable tblTinTuyenDung;
-    private JTextField txtMaTinTuyenDung, txtTieuDe, txtMoTa, txtYeuCau, txtSoLuong, txtHanNop, txtMaDoanhNghiep, txtTuKhoa;
+    private JTextField txtMaTinTuyenDung, txtTenViTri, txtTenDoanhNghiep, txtDiaDiem, txtSoLuong, txtHanNop, txtTuKhoa;
     private JComboBox<String> cboTrangThai;
     private JButton btnThem, btnSua, btnXoa, btnLamMoi, btnTimKiem;
 
     public TinTuyenDungFrame() {
         setTitle("Quản lý Tin Tuyển Dụng");
-        setSize(1150, 720);
+        setSize(1200, 750);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
@@ -29,32 +29,30 @@ public class TinTuyenDungFrame extends JFrame {
         lblTitle.setFont(new Font("Arial", Font.BOLD, 22));
         add(lblTitle, BorderLayout.NORTH);
 
-        // ===== FORM ĐƠN GIẢN (dùng BoxLayout) =====
+        // Form
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
 
-        txtMaTinTuyenDung = new JTextField(20);
-        txtTieuDe = new JTextField(35);
-        txtMoTa = new JTextField(35);
-        txtYeuCau = new JTextField(35);
+        txtMaTinTuyenDung = new JTextField(18);
+        txtTenViTri = new JTextField(35);
+        txtTenDoanhNghiep = new JTextField(30);
+        txtDiaDiem = new JTextField(30);
         txtSoLuong = new JTextField(12);
         txtHanNop = new JTextField(18);
-        txtMaDoanhNghiep = new JTextField(15);
         cboTrangThai = new JComboBox<>(new String[]{"Đang mở", "Đã đóng"});
         txtTuKhoa = new JTextField(20);
 
         formPanel.add(createField("Mã tin:", txtMaTinTuyenDung));
-        formPanel.add(createField("Tiêu đề:", txtTieuDe));
-        formPanel.add(createField("Mô tả:", txtMoTa));
-        formPanel.add(createField("Yêu cầu:", txtYeuCau));
+        formPanel.add(createField("Tên vị trí:", txtTenViTri));
+        formPanel.add(createField("Tên doanh nghiệp:", txtTenDoanhNghiep));
+        formPanel.add(createField("Địa điểm:", txtDiaDiem));
         formPanel.add(createField("Số lượng:", txtSoLuong));
         formPanel.add(createField("Hạn nộp:", txtHanNop));
-        formPanel.add(createField("Mã DN:", txtMaDoanhNghiep));
         formPanel.add(createField("Trạng thái:", cboTrangThai));
 
         // Buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 10));
         btnThem = new JButton("Thêm");
         btnSua = new JButton("Sửa");
         btnXoa = new JButton("Xóa");
@@ -71,7 +69,7 @@ public class TinTuyenDungFrame extends JFrame {
 
         // Table
         tableModel = new DefaultTableModel(new Object[]{
-            "Mã tin", "Tiêu đề", "Mô tả", "Yêu cầu", "Số lượng", "Hạn nộp", "Mã DN", "Trạng thái"}, 0);
+            "Mã tin", "Tên vị trí", "Tên DN", "Địa điểm", "Số lượng", "Hạn nộp", "Trạng thái"}, 0);
         tblTinTuyenDung = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(tblTinTuyenDung);
 
@@ -109,20 +107,19 @@ public class TinTuyenDungFrame extends JFrame {
         tableModel.setRowCount(0);
         for (TinTuyenDung td : service.getAll()) {
             tableModel.addRow(new Object[]{
-                td.getMaTinTuyenDung(), td.getTieuDe(), td.getMoTa(), td.getYeuCau(),
-                td.getSoLuong(), td.getHanNop(), td.getMaDoanhNghiep(), td.getTrangThai()
+                td.getMaTinTuyenDung(), td.getTenViTri(), td.getTenDoanhNghiep(),
+                td.getDiaDiem(), td.getSoLuong(), td.getHanNop(), td.getTrangThai()
             });
         }
     }
 
     private void clearForm() {
         txtMaTinTuyenDung.setText("");
-        txtTieuDe.setText("");
-        txtMoTa.setText("");
-        txtYeuCau.setText("");
+        txtTenViTri.setText("");
+        txtTenDoanhNghiep.setText("");
+        txtDiaDiem.setText("");
         txtSoLuong.setText("");
         txtHanNop.setText("");
-        txtMaDoanhNghiep.setText("");
         cboTrangThai.setSelectedIndex(0);
         tblTinTuyenDung.clearSelection();
     }
@@ -130,12 +127,11 @@ public class TinTuyenDungFrame extends JFrame {
     private TinTuyenDung getDataFromForm() {
         return new TinTuyenDung(
             txtMaTinTuyenDung.getText().trim(),
-            txtTieuDe.getText().trim(),
-            txtMoTa.getText().trim(),
-            txtYeuCau.getText().trim(),
+            txtTenViTri.getText().trim(),
+            txtTenDoanhNghiep.getText().trim(),
+            txtDiaDiem.getText().trim(),
             Integer.parseInt(txtSoLuong.getText().trim()),
             txtHanNop.getText().trim(),
-            txtMaDoanhNghiep.getText().trim(),
             cboTrangThai.getSelectedItem().toString()
         );
     }
@@ -144,18 +140,18 @@ public class TinTuyenDungFrame extends JFrame {
         int row = tblTinTuyenDung.getSelectedRow();
         if (row < 0) return;
         txtMaTinTuyenDung.setText(tableModel.getValueAt(row, 0).toString());
-        txtTieuDe.setText(tableModel.getValueAt(row, 1).toString());
-        txtMoTa.setText(tableModel.getValueAt(row, 2).toString());
-        txtYeuCau.setText(tableModel.getValueAt(row, 3).toString());
+        txtTenViTri.setText(tableModel.getValueAt(row, 1).toString());
+        txtTenDoanhNghiep.setText(tableModel.getValueAt(row, 2).toString());
+        txtDiaDiem.setText(tableModel.getValueAt(row, 3).toString());
         txtSoLuong.setText(tableModel.getValueAt(row, 4).toString());
         txtHanNop.setText(tableModel.getValueAt(row, 5).toString());
-        txtMaDoanhNghiep.setText(tableModel.getValueAt(row, 6).toString());
-        cboTrangThai.setSelectedItem(tableModel.getValueAt(row, 7).toString());
+        cboTrangThai.setSelectedItem(tableModel.getValueAt(row, 6).toString());
     }
 
     private boolean validateForm() {
-        if (ValidationUtil.isEmpty(txtMaTinTuyenDung.getText()) || ValidationUtil.isEmpty(txtTieuDe.getText())) {
-            MessageUtil.showError(this, "Mã tin và Tiêu đề không được trống!");
+        if (ValidationUtil.isEmpty(txtMaTinTuyenDung.getText()) || 
+            ValidationUtil.isEmpty(txtTenViTri.getText())) {
+            MessageUtil.showError(this, "Mã tin và Tên vị trí không được trống!");
             return false;
         }
         try {
@@ -170,7 +166,7 @@ public class TinTuyenDungFrame extends JFrame {
     private void btnThemActionPerformed() {
         if (!validateForm()) return;
         try {
-            if (service.them(getDataFromForm())) {
+            if (service.add(getDataFromForm())) {
                 loadDataToTable();
                 clearForm();
                 MessageUtil.showInfo(this, "Thêm tin tuyển dụng thành công!");
@@ -185,7 +181,7 @@ public class TinTuyenDungFrame extends JFrame {
     private void btnSuaActionPerformed() {
         if (!validateForm()) return;
         try {
-            if (service.sua(getDataFromForm())) {
+            if (service.update(getDataFromForm())) {
                 loadDataToTable();
                 MessageUtil.showInfo(this, "Cập nhật thành công!");
             } else {
@@ -204,7 +200,7 @@ public class TinTuyenDungFrame extends JFrame {
         }
         String ma = tableModel.getValueAt(row, 0).toString();
         if (MessageUtil.showConfirm(this, "Xóa tin " + ma + "?")) {
-            service.xoa(ma);
+            service.delete(ma);
             loadDataToTable();
             clearForm();
             MessageUtil.showInfo(this, "Xóa thành công!");
@@ -214,11 +210,11 @@ public class TinTuyenDungFrame extends JFrame {
     private void btnTimKiemActionPerformed() {
         String kw = txtTuKhoa.getText().trim();
         tableModel.setRowCount(0);
-        List<TinTuyenDung> ketQua = kw.isEmpty() ? service.getAll() : service.timKiem(kw);
+        List<TinTuyenDung> ketQua = kw.isEmpty() ? service.getAll() : service.search(kw);
         for (TinTuyenDung td : ketQua) {
             tableModel.addRow(new Object[]{
-                td.getMaTinTuyenDung(), td.getTieuDe(), td.getMoTa(), td.getYeuCau(),
-                td.getSoLuong(), td.getHanNop(), td.getMaDoanhNghiep(), td.getTrangThai()
+                td.getMaTinTuyenDung(), td.getTenViTri(), td.getTenDoanhNghiep(),
+                td.getDiaDiem(), td.getSoLuong(), td.getHanNop(), td.getTrangThai()
             });
         }
     }
