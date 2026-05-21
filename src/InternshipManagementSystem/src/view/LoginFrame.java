@@ -42,7 +42,7 @@ public class LoginFrame extends JFrame {
     private JCheckBox chkShowPassword;
     private GradientButton btnLogin;
     private ExitButton btnExit;
-    private JLabel lblMessage;
+    private JTextField lblMessage;
 
     private UnderlineInputPanel usernameInputPanel;
     private UnderlineInputPanel passwordInputPanel;
@@ -103,10 +103,15 @@ public class LoginFrame extends JFrame {
         lblSubtitle.setForeground(COLOR_SLATE);
         lblSubtitle.setHorizontalAlignment(SwingConstants.CENTER);
 
-        lblMessage = new JLabel("Tài khoản chạy thử nghiệm: admin / 123456");
+        lblMessage = new JTextField("Tài khoản chạy thử nghiệm: admin / 123456");
         lblMessage.setFont(new Font("Segoe UI", Font.BOLD, 12));
         lblMessage.setForeground(COLOR_BADGE_TEXT);
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMessage.setEditable(false);
+        lblMessage.setFocusable(true);
+        lblMessage.setOpaque(false);
+        lblMessage.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        lblMessage.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         badgePanel = new RoundedPanel(18, COLOR_BADGE_BG);
         badgePanel.setLayout(new BorderLayout());

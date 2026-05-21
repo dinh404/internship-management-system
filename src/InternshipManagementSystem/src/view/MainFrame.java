@@ -306,22 +306,26 @@ public class MainFrame extends JFrame {
 
     private void initEvents() {
         btnSinhVien.addActionListener(e -> {
-            SinhVienFrame sinhVienFrame = new SinhVienFrame();
-            sinhVienFrame.setVisible(true);
+            SinhVienFrame frame = new SinhVienFrame();
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setVisible(true);
         });
 
         btnTinTuyenDung.addActionListener(e -> {
             TinTuyenDungFrame frame = new TinTuyenDungFrame();
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);
         });
 
         btnUngTuyen.addActionListener(e -> {
             UngTuyenFrame frame = new UngTuyenFrame();
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);
         });
 
         btnBaoCao.addActionListener(e -> {
             BaoCaoFrame frame = new BaoCaoFrame();
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);
         });
 
