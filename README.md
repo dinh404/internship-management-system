@@ -26,6 +26,7 @@
 - Java Swing
 - Apache NetBeans
 - Git/GitHub
+- Oracle Database, JDBC: định hướng tích hợp ở giai đoạn sau
 
 ## Trạng thái dữ liệu
 Phiên bản hiện tại sử dụng dữ liệu mẫu bằng ArrayList để phục vụ demo giao diện và nghiệp vụ. Cơ sở dữ liệu sẽ được tích hợp ở giai đoạn phát triển tiếp theo.
