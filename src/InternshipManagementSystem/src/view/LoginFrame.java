@@ -270,6 +270,7 @@ public class LoginFrame extends JFrame {
             MessageUtil.showInfo(this, "Đăng nhập thành công!");
 
             MainFrame mainFrame = new MainFrame();
+            mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             mainFrame.setVisible(true);
             dispose();
         } else {
