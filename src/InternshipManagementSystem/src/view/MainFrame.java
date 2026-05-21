@@ -264,16 +264,7 @@ public class MainFrame extends JFrame {
         } else if (currentUser.isDoanhNghiep() || currentUser.isHR()) {
             contentPanel.add(new TinTuyenDungCuaToiPanel(currentUser), CARD_DN_TIN_CUA_TOI);
 
-            contentPanel.add(createFeaturePlaceholderPanel(
-                    "HỒ SƠ ỨNG VIÊN",
-                    "Doanh nghiệp/HR xem hồ sơ sinh viên ứng tuyển và cập nhật trạng thái xét duyệt.",
-                    new String[]{
-                        "Xem danh sách sinh viên ứng tuyển vào các tin của doanh nghiệp.",
-                        "Kiểm tra thông tin sinh viên, CV và vị trí ứng tuyển.",
-                        "Cập nhật trạng thái: Chờ duyệt, Đã duyệt, Từ chối hoặc Mời phỏng vấn.",
-                        "Hỗ trợ doanh nghiệp theo dõi tiến độ tuyển thực tập sinh."
-                    }
-            ), CARD_DN_HO_SO_UNG_VIEN);
+            contentPanel.add(new HoSoUngVienPanel(currentUser), CARD_DN_HO_SO_UNG_VIEN);
 
             contentPanel.add(createFeaturePlaceholderPanel(
                     "THÔNG TIN DOANH NGHIỆP",
