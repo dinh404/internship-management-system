@@ -2,7 +2,9 @@ package view;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -29,24 +31,44 @@ import util.MessageUtil;
 
 public class MainFrame extends JFrame {
 
-    private JButton btnTongQuan;
+    private static final String CARD_DASHBOARD = "DASHBOARD";
 
-    private JButton btnSinhVien;
-    private JButton btnTinTuyenDung;
-    private JButton btnUngTuyen;
-    private JButton btnBaoCao;
+    private static final String CARD_ADMIN_SINH_VIEN = "ADMIN_SINH_VIEN";
+    private static final String CARD_ADMIN_TIN_TUYEN_DUNG = "ADMIN_TIN_TUYEN_DUNG";
+    private static final String CARD_ADMIN_UNG_TUYEN = "ADMIN_UNG_TUYEN";
+    private static final String CARD_ADMIN_BAO_CAO = "ADMIN_BAO_CAO";
 
-    private JButton btnXemTinTuyenDung;
-    private JButton btnUngTuyenCuaToi;
-    private JButton btnThongTinCaNhan;
+    private static final String CARD_SV_XEM_TIN = "SV_XEM_TIN";
+    private static final String CARD_SV_CV = "SV_CV";
+    private static final String CARD_SV_UNG_TUYEN = "SV_UNG_TUYEN";
+    private static final String CARD_SV_THONG_TIN = "SV_THONG_TIN";
 
-    private JButton btnTinCuaDoanhNghiep;
-    private JButton btnHoSoUngVien;
-    private JButton btnThongTinDoanhNghiep;
+    private static final String CARD_DN_TIN_CUA_TOI = "DN_TIN_CUA_TOI";
+    private static final String CARD_DN_HO_SO_UNG_VIEN = "DN_HO_SO_UNG_VIEN";
+    private static final String CARD_DN_THONG_TIN = "DN_THONG_TIN";
+
+    private SidebarButton btnTongQuan;
+
+    private SidebarButton btnSinhVien;
+    private SidebarButton btnTinTuyenDung;
+    private SidebarButton btnUngTuyen;
+    private SidebarButton btnBaoCao;
+
+    private SidebarButton btnXemTinTuyenDung;
+    private SidebarButton btnCVCuaToi;
+    private SidebarButton btnUngTuyenCuaToi;
+    private SidebarButton btnThongTinCaNhan;
+
+    private SidebarButton btnTinCuaDoanhNghiep;
+    private SidebarButton btnHoSoUngVien;
+    private SidebarButton btnThongTinDoanhNghiep;
 
     private JButton btnDangXuat;
 
     private TaiKhoan currentUser;
+    private CardLayout cardLayout;
+    private JPanel contentPanel;
+    private SidebarButton activeButton;
 
     private final Color COLOR_NAVY = Color.decode("#1E3A8A");
     private final Color COLOR_TEAL = Color.decode("#0D9488");
@@ -82,6 +104,7 @@ public class MainFrame extends JFrame {
 
         initUI();
         initEvents();
+        showCard(CARD_DASHBOARD, btnTongQuan);
     }
 
     private void initUI() {
@@ -95,7 +118,12 @@ public class MainFrame extends JFrame {
         rootPanel.setBackground(COLOR_BACKGROUND);
 
         JPanel sidebarPanel = createSidebarPanel();
-        JPanel contentPanel = createContentPanel();
+
+        cardLayout = new CardLayout();
+        contentPanel = new JPanel(cardLayout);
+        contentPanel.setBackground(COLOR_BACKGROUND);
+
+        buildContentCardsByRole();
 
         rootPanel.add(sidebarPanel, BorderLayout.WEST);
         rootPanel.add(contentPanel, BorderLayout.CENTER);
@@ -197,12 +225,14 @@ public class MainFrame extends JFrame {
             addMenuButton(menuPanel, btnBaoCao, 4);
         } else if (currentUser.isSinhVien()) {
             btnXemTinTuyenDung = createMenuButton("Xem tin tuyển dụng");
+            btnCVCuaToi = createMenuButton("CV của tôi");
             btnUngTuyenCuaToi = createMenuButton("Ứng tuyển của tôi");
             btnThongTinCaNhan = createMenuButton("Thông tin cá nhân");
 
             addMenuButton(menuPanel, btnXemTinTuyenDung, 1);
-            addMenuButton(menuPanel, btnUngTuyenCuaToi, 2);
-            addMenuButton(menuPanel, btnThongTinCaNhan, 3);
+            addMenuButton(menuPanel, btnCVCuaToi, 2);
+            addMenuButton(menuPanel, btnUngTuyenCuaToi, 3);
+            addMenuButton(menuPanel, btnThongTinCaNhan, 4);
         } else if (currentUser.isDoanhNghiep() || currentUser.isHR()) {
             btnTinCuaDoanhNghiep = createMenuButton("Tin tuyển dụng của tôi");
             btnHoSoUngVien = createMenuButton("Hồ sơ ứng viên");
@@ -214,7 +244,126 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private JPanel createContentPanel() {
+    private void buildContentCardsByRole() {
+        contentPanel.add(createDashboardPanelByRole(), CARD_DASHBOARD);
+
+        if (currentUser.isAdmin()) {
+            contentPanel.add(wrapFrameContent(new SinhVienFrame()), CARD_ADMIN_SINH_VIEN);
+            contentPanel.add(wrapFrameContent(new TinTuyenDungFrame()), CARD_ADMIN_TIN_TUYEN_DUNG);
+            contentPanel.add(wrapFrameContent(new UngTuyenFrame()), CARD_ADMIN_UNG_TUYEN);
+            contentPanel.add(wrapFrameContent(new BaoCaoFrame()), CARD_ADMIN_BAO_CAO);
+        } else if (currentUser.isSinhVien()) {
+            contentPanel.add(createFeaturePlaceholderPanel(
+                    "XEM TIN TUYỂN DỤNG",
+                    "Sinh viên xem danh sách vị trí thực tập đang mở, tìm kiếm cơ hội phù hợp và gửi hồ sơ ứng tuyển.",
+                    new String[]{
+                        "Tra cứu tin tuyển dụng theo vị trí, doanh nghiệp, địa điểm hoặc ngành nghề.",
+                        "Xem thông tin chi tiết về vị trí thực tập và yêu cầu tuyển dụng.",
+                        "Chọn CV phù hợp để gửi hồ sơ ứng tuyển vào vị trí mong muốn.",
+                        "Dữ liệu hiện tại sẽ sử dụng ArrayList mẫu trong giai đoạn demo."
+                    }
+            ), CARD_SV_XEM_TIN);
+
+            contentPanel.add(createFeaturePlaceholderPanel(
+                    "CV CỦA TÔI",
+                    "Sinh viên quản lý hồ sơ CV cá nhân phục vụ quá trình ứng tuyển thực tập.",
+                    new String[]{
+                        "Xem danh sách CV cá nhân đã tạo trong hệ thống.",
+                        "Theo dõi CV chính được sử dụng khi ứng tuyển.",
+                        "Cập nhật kỹ năng, kinh nghiệm, mục tiêu nghề nghiệp trong CV.",
+                        "Chức năng upload file CV thật sẽ được mở rộng ở giai đoạn sau."
+                    }
+            ), CARD_SV_CV);
+
+            contentPanel.add(createFeaturePlaceholderPanel(
+                    "ỨNG TUYỂN CỦA TÔI",
+                    "Sinh viên theo dõi các hồ sơ đã nộp và trạng thái xử lý từ doanh nghiệp hoặc HR.",
+                    new String[]{
+                        "Xem danh sách đơn ứng tuyển đã gửi.",
+                        "Theo dõi trạng thái: Chờ duyệt, Đã duyệt, Từ chối hoặc Mời phỏng vấn.",
+                        "Hủy ứng tuyển đối với hồ sơ chưa được xử lý.",
+                        "Nhận thông báo khi doanh nghiệp cập nhật kết quả xét duyệt."
+                    }
+            ), CARD_SV_UNG_TUYEN);
+
+            contentPanel.add(createFeaturePlaceholderPanel(
+                    "THÔNG TIN CÁ NHÂN",
+                    "Sinh viên xem và cập nhật thông tin cá nhân phục vụ quá trình kết nối thực tập.",
+                    new String[]{
+                        "Xem mã sinh viên, họ tên, email, số điện thoại, ngành học và GPA.",
+                        "Cập nhật thông tin liên hệ để doanh nghiệp dễ dàng phản hồi.",
+                        "Theo dõi trạng thái thực tập hiện tại của sinh viên.",
+                        "Dữ liệu cá nhân sẽ liên kết với tài khoản sinh viên đang đăng nhập."
+                    }
+            ), CARD_SV_THONG_TIN);
+        } else if (currentUser.isDoanhNghiep() || currentUser.isHR()) {
+            contentPanel.add(createFeaturePlaceholderPanel(
+                    "TIN TUYỂN DỤNG CỦA TÔI",
+                    "Doanh nghiệp/HR quản lý các tin tuyển dụng thực tập do đơn vị mình đăng tải.",
+                    new String[]{
+                        "Xem danh sách tin tuyển dụng thuộc doanh nghiệp hiện tại.",
+                        "Tạo mới hoặc cập nhật thông tin vị trí thực tập.",
+                        "Đóng tin khi đã đủ số lượng ứng viên hoặc hết hạn tuyển.",
+                        "Chỉ thao tác trên dữ liệu thuộc doanh nghiệp của tài khoản đang đăng nhập."
+                    }
+            ), CARD_DN_TIN_CUA_TOI);
+
+            contentPanel.add(createFeaturePlaceholderPanel(
+                    "HỒ SƠ ỨNG VIÊN",
+                    "Doanh nghiệp/HR xem hồ sơ sinh viên ứng tuyển và cập nhật trạng thái xét duyệt.",
+                    new String[]{
+                        "Xem danh sách sinh viên ứng tuyển vào các tin của doanh nghiệp.",
+                        "Kiểm tra thông tin sinh viên, CV và vị trí ứng tuyển.",
+                        "Cập nhật trạng thái: Chờ duyệt, Đã duyệt, Từ chối hoặc Mời phỏng vấn.",
+                        "Hỗ trợ doanh nghiệp theo dõi tiến độ tuyển thực tập sinh."
+                    }
+            ), CARD_DN_HO_SO_UNG_VIEN);
+
+            contentPanel.add(createFeaturePlaceholderPanel(
+                    "THÔNG TIN DOANH NGHIỆP",
+                    "Doanh nghiệp/HR xem và cập nhật thông tin đơn vị để tăng độ tin cậy khi kết nối với sinh viên.",
+                    new String[]{
+                        "Xem mã doanh nghiệp, tên doanh nghiệp, lĩnh vực hoạt động và thông tin liên hệ.",
+                        "Cập nhật mô tả doanh nghiệp, địa chỉ và người phụ trách tuyển dụng.",
+                        "Thông tin doanh nghiệp được hiển thị kèm các tin tuyển dụng.",
+                        "Dữ liệu hiện tại là dữ liệu mẫu phục vụ demo giao diện."
+                    }
+            ), CARD_DN_THONG_TIN);
+        }
+    }
+
+    private JPanel wrapFrameContent(JFrame frame) {
+        Container oldContent = frame.getContentPane();
+        frame.setContentPane(new JPanel());
+
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(COLOR_BACKGROUND);
+        wrapper.add(oldContent, BorderLayout.CENTER);
+
+        return wrapper;
+    }
+
+    private void showCard(String cardName, SidebarButton selectedButton) {
+        if (cardLayout != null && contentPanel != null) {
+            cardLayout.show(contentPanel, cardName);
+        }
+
+        setActiveButton(selectedButton);
+    }
+
+    private void setActiveButton(SidebarButton selectedButton) {
+        if (activeButton != null) {
+            activeButton.setActive(false);
+        }
+
+        activeButton = selectedButton;
+
+        if (activeButton != null) {
+            activeButton.setActive(true);
+        }
+    }
+
+    private JPanel createDashboardPanelByRole() {
         if (currentUser.isSinhVien()) {
             return createStudentDashboardPanel();
         }
@@ -254,21 +403,21 @@ public class MainFrame extends JFrame {
     private JPanel createStudentDashboardPanel() {
         String[][] cards = {
             {"Tin đang mở", "18", "Cơ hội thực tập có thể xem"},
+            {"CV cá nhân", "2", "Hồ sơ CV đang lưu"},
             {"Đơn đã nộp", "3", "Hồ sơ ứng tuyển của bạn"},
-            {"Chờ duyệt", "1", "Đang chờ doanh nghiệp xử lý"},
             {"Đã duyệt", "1", "Hồ sơ có phản hồi tích cực"}
         };
 
         String[] guideLines = {
             "Xem danh sách tin tuyển dụng thực tập đang mở.",
+            "Chuẩn bị hoặc cập nhật CV cá nhân trước khi ứng tuyển.",
             "Chọn vị trí phù hợp và gửi hồ sơ ứng tuyển.",
-            "Theo dõi trạng thái xử lý của từng đơn ứng tuyển.",
-            "Cập nhật thông tin cá nhân khi cần thiết."
+            "Theo dõi trạng thái xử lý của từng đơn ứng tuyển."
         };
 
         return createDashboardPanel(
                 "Chào mừng " + currentUser.getTenHienThi(),
-                "Không gian dành cho sinh viên theo dõi cơ hội thực tập và tiến độ ứng tuyển",
+                "Không gian dành cho sinh viên theo dõi cơ hội thực tập, CV và tiến độ ứng tuyển",
                 "Hãy bắt đầu bằng việc xem các tin tuyển dụng đang mở từ doanh nghiệp.",
                 cards,
                 "Luồng thao tác dành cho sinh viên",
@@ -304,9 +453,9 @@ public class MainFrame extends JFrame {
     private JPanel createDashboardPanel(String welcomeText, String subtitle, String hint,
             String[][] cards, String guideTitle, String[] guideLines) {
 
-        JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBackground(COLOR_BACKGROUND);
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(34, 34, 34, 34));
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(COLOR_BACKGROUND);
+        panel.setBorder(BorderFactory.createEmptyBorder(34, 34, 34, 34));
 
         RoundedPanel welcomeCard = new RoundedPanel(28, COLOR_CARD);
         welcomeCard.setLayout(new BorderLayout());
@@ -360,35 +509,35 @@ public class MainFrame extends JFrame {
         lowerPanel.add(featurePanel, BorderLayout.NORTH);
         lowerPanel.add(createGuideCard(guideTitle, guideLines), BorderLayout.CENTER);
 
-        contentPanel.add(welcomeCard, BorderLayout.NORTH);
-        contentPanel.add(lowerPanel, BorderLayout.CENTER);
+        panel.add(welcomeCard, BorderLayout.NORTH);
+        panel.add(lowerPanel, BorderLayout.CENTER);
 
-        return contentPanel;
+        return panel;
     }
 
-        private RoundedPanel createFeatureCard(String title, String value, String description) {
-            RoundedPanel card = new RoundedPanel(24, COLOR_CARD);
-            card.setLayout(new BorderLayout());
-            card.setBorder(BorderFactory.createEmptyBorder(22, 20, 22, 20));
+    private RoundedPanel createFeatureCard(String title, String value, String description) {
+        RoundedPanel card = new RoundedPanel(24, COLOR_CARD);
+        card.setLayout(new BorderLayout());
+        card.setBorder(BorderFactory.createEmptyBorder(22, 20, 22, 20));
 
-            JLabel lblTitle = new JLabel(title);
-            lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-            lblTitle.setForeground(COLOR_MUTED);
+        JLabel lblTitle = new JLabel(title);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblTitle.setForeground(COLOR_MUTED);
 
-            JLabel lblValue = new JLabel(value);
-            lblValue.setFont(new Font("Segoe UI", Font.BOLD, 34));
-            lblValue.setForeground(COLOR_TEAL);
+        JLabel lblValue = new JLabel(value);
+        lblValue.setFont(new Font("Segoe UI", Font.BOLD, 34));
+        lblValue.setForeground(COLOR_TEAL);
 
-            JLabel lblDescription = new JLabel(description);
-            lblDescription.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-            lblDescription.setForeground(COLOR_MUTED);
+        JLabel lblDescription = new JLabel(description);
+        lblDescription.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        lblDescription.setForeground(COLOR_MUTED);
 
-            card.add(lblTitle, BorderLayout.NORTH);
-            card.add(lblValue, BorderLayout.CENTER);
-            card.add(lblDescription, BorderLayout.SOUTH);
+        card.add(lblTitle, BorderLayout.NORTH);
+        card.add(lblValue, BorderLayout.CENTER);
+        card.add(lblDescription, BorderLayout.SOUTH);
 
-            return card;
-        }
+        return card;
+    }
 
     private RoundedPanel createGuideCard(String title, String[] lines) {
         RoundedPanel guideCard = new RoundedPanel(26, COLOR_CARD);
@@ -431,7 +580,48 @@ public class MainFrame extends JFrame {
         return guideCard;
     }
 
-    private JButton createMenuButton(String text) {
+    private JPanel createFeaturePlaceholderPanel(String title, String subtitle, String[] guideLines) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(COLOR_BACKGROUND);
+        panel.setBorder(BorderFactory.createEmptyBorder(34, 34, 34, 34));
+
+        RoundedPanel mainCard = new RoundedPanel(28, COLOR_CARD);
+        mainCard.setLayout(new BorderLayout());
+        mainCard.setBorder(BorderFactory.createEmptyBorder(32, 34, 32, 34));
+
+        JLabel lblTitle = new JLabel(title);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblTitle.setForeground(COLOR_NAVY);
+
+        JLabel lblSubtitle = new JLabel("<html>" + subtitle + "</html>");
+        lblSubtitle.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblSubtitle.setForeground(COLOR_MUTED);
+
+        JPanel titlePanel = new JPanel(new GridBagLayout());
+        titlePanel.setOpaque(false);
+
+        GridBagConstraints titleGbc = new GridBagConstraints();
+        titleGbc.gridx = 0;
+        titleGbc.anchor = GridBagConstraints.WEST;
+        titleGbc.fill = GridBagConstraints.HORIZONTAL;
+        titleGbc.weightx = 1.0;
+
+        titleGbc.gridy = 0;
+        titleGbc.insets = new Insets(0, 0, 8, 0);
+        titlePanel.add(lblTitle, titleGbc);
+
+        titleGbc.gridy = 1;
+        titleGbc.insets = new Insets(0, 0, 0, 0);
+        titlePanel.add(lblSubtitle, titleGbc);
+
+        mainCard.add(titlePanel, BorderLayout.NORTH);
+        mainCard.add(createGuideCard("Nội dung nghiệp vụ dự kiến", guideLines), BorderLayout.CENTER);
+
+        panel.add(mainCard, BorderLayout.CENTER);
+        return panel;
+    }
+
+    private SidebarButton createMenuButton(String text) {
         SidebarButton button = new SidebarButton(text, COLOR_NAVY, COLOR_TEAL);
         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
         button.setForeground(Color.WHITE);
@@ -481,81 +671,51 @@ public class MainFrame extends JFrame {
 
     private void initEvents() {
         if (btnTongQuan != null) {
-            btnTongQuan.addActionListener(e -> {
-                MessageUtil.showInfo(this, "Bạn đang ở màn hình tổng quan.");
-            });
+            btnTongQuan.addActionListener(e -> showCard(CARD_DASHBOARD, btnTongQuan));
         }
 
         if (btnSinhVien != null) {
-            btnSinhVien.addActionListener(e -> {
-                SinhVienFrame frame = new SinhVienFrame();
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                frame.setVisible(true);
-            });
+            btnSinhVien.addActionListener(e -> showCard(CARD_ADMIN_SINH_VIEN, btnSinhVien));
         }
 
         if (btnTinTuyenDung != null) {
-            btnTinTuyenDung.addActionListener(e -> {
-                TinTuyenDungFrame frame = new TinTuyenDungFrame();
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                frame.setVisible(true);
-            });
+            btnTinTuyenDung.addActionListener(e -> showCard(CARD_ADMIN_TIN_TUYEN_DUNG, btnTinTuyenDung));
         }
 
         if (btnUngTuyen != null) {
-            btnUngTuyen.addActionListener(e -> {
-                UngTuyenFrame frame = new UngTuyenFrame();
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                frame.setVisible(true);
-            });
+            btnUngTuyen.addActionListener(e -> showCard(CARD_ADMIN_UNG_TUYEN, btnUngTuyen));
         }
 
         if (btnBaoCao != null) {
-            btnBaoCao.addActionListener(e -> {
-                BaoCaoFrame frame = new BaoCaoFrame();
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                frame.setVisible(true);
-            });
+            btnBaoCao.addActionListener(e -> showCard(CARD_ADMIN_BAO_CAO, btnBaoCao));
         }
 
         if (btnXemTinTuyenDung != null) {
-            btnXemTinTuyenDung.addActionListener(e -> {
-                MessageUtil.showInfo(this, "Sinh viên có thể xem danh sách tin tuyển dụng đang mở và chọn vị trí phù hợp để ứng tuyển. Màn hình chi tiết sẽ được xây dựng ở bước tiếp theo.");
-            });
+            btnXemTinTuyenDung.addActionListener(e -> showCard(CARD_SV_XEM_TIN, btnXemTinTuyenDung));
+        }
+
+        if (btnCVCuaToi != null) {
+            btnCVCuaToi.addActionListener(e -> showCard(CARD_SV_CV, btnCVCuaToi));
         }
 
         if (btnUngTuyenCuaToi != null) {
-            btnUngTuyenCuaToi.addActionListener(e -> {
-                MessageUtil.showInfo(this, "Sinh viên có thể theo dõi các đơn ứng tuyển đã nộp và trạng thái xử lý của từng hồ sơ. Màn hình chi tiết sẽ được xây dựng ở bước tiếp theo.");
-            });
+            btnUngTuyenCuaToi.addActionListener(e -> showCard(CARD_SV_UNG_TUYEN, btnUngTuyenCuaToi));
         }
 
         if (btnThongTinCaNhan != null) {
-            btnThongTinCaNhan.addActionListener(e -> {
-                MessageUtil.showInfo(this, "Sinh viên có thể xem và cập nhật thông tin cá nhân, phục vụ quá trình ứng tuyển thực tập. Màn hình chi tiết sẽ được xây dựng ở bước tiếp theo.");
-            });
+            btnThongTinCaNhan.addActionListener(e -> showCard(CARD_SV_THONG_TIN, btnThongTinCaNhan));
         }
 
         if (btnTinCuaDoanhNghiep != null) {
-            btnTinCuaDoanhNghiep.addActionListener(e -> {
-                MessageUtil.showInfo(this, "Doanh nghiệp/HR có thể quản lý các tin tuyển dụng thực tập của đơn vị mình. Màn hình chi tiết sẽ được xây dựng ở bước tiếp theo.");
-            });
+            btnTinCuaDoanhNghiep.addActionListener(e -> showCard(CARD_DN_TIN_CUA_TOI, btnTinCuaDoanhNghiep));
         }
 
         if (btnHoSoUngVien != null) {
-            btnHoSoUngVien.addActionListener(e -> {
-                MessageUtil.showInfo(this, "Doanh nghiệp/HR có thể xem hồ sơ sinh viên ứng tuyển và cập nhật trạng thái xét duyệt. Màn hình chi tiết sẽ được xây dựng ở bước tiếp theo.");
-            });
+            btnHoSoUngVien.addActionListener(e -> showCard(CARD_DN_HO_SO_UNG_VIEN, btnHoSoUngVien));
         }
 
         if (btnThongTinDoanhNghiep != null) {
-            btnThongTinDoanhNghiep.addActionListener(e -> {
-                MessageUtil.showInfo(this, "Doanh nghiệp/HR có thể xem và cập nhật thông tin đơn vị để phục vụ kết nối thực tập. Màn hình chi tiết sẽ được xây dựng ở bước tiếp theo.");
-            });
+            btnThongTinDoanhNghiep.addActionListener(e -> showCard(CARD_DN_THONG_TIN, btnThongTinDoanhNghiep));
         }
 
         btnDangXuat.addActionListener(e -> {
@@ -614,6 +774,7 @@ public class MainFrame extends JFrame {
         private final Color normalColor;
         private final Color hoverColor;
         private boolean hovered = false;
+        private boolean active = false;
 
         public SidebarButton(String text, Color normalColor, Color hoverColor) {
             super(text);
@@ -624,7 +785,7 @@ public class MainFrame extends JFrame {
             setBorderPainted(false);
             setContentAreaFilled(false);
             setHorizontalAlignment(SwingConstants.LEFT);
-            setBorder(BorderFactory.createEmptyBorder(0, 18, 0, 18));
+            setBorder(BorderFactory.createEmptyBorder(0, 24, 0, 18));
 
             addMouseListener(new MouseAdapter() {
                 @Override
@@ -641,6 +802,11 @@ public class MainFrame extends JFrame {
             });
         }
 
+        public void setActive(boolean active) {
+            this.active = active;
+            repaint();
+        }
+
         @Override
         protected void paintComponent(Graphics graphics) {
             Graphics2D g2 = (Graphics2D) graphics.create();
@@ -648,11 +814,11 @@ public class MainFrame extends JFrame {
 
             int arc = 18;
 
-            if (hovered) {
+            if (active || hovered) {
                 g2.setColor(hoverColor);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
 
-                g2.setColor(new Color(255, 255, 255, 90));
+                g2.setColor(new Color(255, 255, 255, 95));
                 g2.setStroke(new BasicStroke(1.4f));
                 g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, arc, arc);
             } else {
@@ -662,6 +828,15 @@ public class MainFrame extends JFrame {
                 g2.setColor(new Color(255, 255, 255, 42));
                 g2.setStroke(new BasicStroke(1.1f));
                 g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, arc, arc);
+            }
+
+            if (active) {
+                int centerY = getHeight() / 2;
+                int[] xPoints = {9, 17, 9};
+                int[] yPoints = {centerY - 7, centerY, centerY + 7};
+
+                g2.setColor(Color.WHITE);
+                g2.fillPolygon(xPoints, yPoints, 3);
             }
 
             g2.dispose();
