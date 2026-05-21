@@ -1,4 +1,4 @@
-# Internship Management System - IMEC
+# Internship Management & Enterprise Connection - IMEC
 
 Ứng dụng Java Swing mô phỏng hệ thống quản lý thực tập và kết nối doanh nghiệp. Hệ thống hỗ trợ phân quyền giao diện theo vai trò: Quản trị viên, Sinh viên và Doanh nghiệp/HR.
 
