@@ -65,8 +65,8 @@ public class LoginFrame extends JFrame {
     private final Color COLOR_INPUT_LINE = Color.decode("#E2E8F0");
     private final Color COLOR_DANGER = Color.decode("#DC2626");
     private final Color COLOR_DANGER_HOVER = Color.decode("#EF4444");
-    private final Color COLOR_BADGE_BG = Color.decode("#DCFCE7");
-    private final Color COLOR_BADGE_TEXT = Color.decode("#16A34A");
+    private final Color COLOR_BADGE_BG = Color.decode("#EFF6FF");
+    private final Color COLOR_BADGE_TEXT = Color.decode("#1E3A8A");
     private final Color COLOR_GREEN_START = Color.decode("#059669");
     private final Color COLOR_GREEN_END = Color.decode("#10B981");
 
@@ -202,7 +202,7 @@ public class LoginFrame extends JFrame {
     private JButton createDemoRoleButton(String text) {
         DemoRoleButton button = new DemoRoleButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 10));
-        button.setForeground(Color.decode("#047857"));
+        button.setForeground(Color.decode("#1E3A8A"));
         button.setPreferredSize(new Dimension(96, 34));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return button;
@@ -604,8 +604,8 @@ public class LoginFrame extends JFrame {
             Graphics2D g2 = (Graphics2D) graphics.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            Color bg = hovered ? Color.decode("#D1FAE5") : Color.decode("#ECFDF5");
-            Color border = hovered ? Color.decode("#10B981") : Color.decode("#BBF7D0");
+            Color bg = hovered ? Color.decode("#DBEAFE") : Color.decode("#EFF6FF");
+            Color border = hovered ? Color.decode("#1E3A8A") : Color.decode("#BFDBFE");
 
             g2.setColor(bg);
             g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 16, 16);
