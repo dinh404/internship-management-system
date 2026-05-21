@@ -257,16 +257,7 @@ public class MainFrame extends JFrame {
 
             contentPanel.add(new QuanLyCVPanel(currentUser), CARD_SV_CV);
 
-            contentPanel.add(createFeaturePlaceholderPanel(
-                    "ỨNG TUYỂN CỦA TÔI",
-                    "Sinh viên theo dõi các hồ sơ đã nộp và trạng thái xử lý từ doanh nghiệp hoặc HR.",
-                    new String[]{
-                        "Xem danh sách đơn ứng tuyển đã gửi.",
-                        "Theo dõi trạng thái: Chờ duyệt, Đã duyệt, Từ chối hoặc Mời phỏng vấn.",
-                        "Hủy ứng tuyển đối với hồ sơ chưa được xử lý.",
-                        "Nhận thông báo khi doanh nghiệp cập nhật kết quả xét duyệt."
-                    }
-            ), CARD_SV_UNG_TUYEN);
+            contentPanel.add(new UngTuyenCuaToiPanel(currentUser), CARD_SV_UNG_TUYEN);
 
             contentPanel.add(createFeaturePlaceholderPanel(
                     "THÔNG TIN CÁ NHÂN",
