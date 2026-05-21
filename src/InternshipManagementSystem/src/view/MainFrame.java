@@ -55,7 +55,7 @@ public class MainFrame extends JFrame {
     private SidebarButton btnBaoCao;
 
     private SidebarButton btnXemTinTuyenDung;
-    private SidebarButton btnCVCuaToi;
+    private SidebarButton btnQuanLyCV;
     private SidebarButton btnUngTuyenCuaToi;
     private SidebarButton btnThongTinCaNhan;
 
@@ -225,12 +225,12 @@ public class MainFrame extends JFrame {
             addMenuButton(menuPanel, btnBaoCao, 4);
         } else if (currentUser.isSinhVien()) {
             btnXemTinTuyenDung = createMenuButton("Xem tin tuyển dụng");
-            btnCVCuaToi = createMenuButton("CV của tôi");
+            btnQuanLyCV = createMenuButton("Quản lý CV");
             btnUngTuyenCuaToi = createMenuButton("Ứng tuyển của tôi");
             btnThongTinCaNhan = createMenuButton("Thông tin cá nhân");
 
             addMenuButton(menuPanel, btnXemTinTuyenDung, 1);
-            addMenuButton(menuPanel, btnCVCuaToi, 2);
+            addMenuButton(menuPanel, btnQuanLyCV, 2);
             addMenuButton(menuPanel, btnUngTuyenCuaToi, 3);
             addMenuButton(menuPanel, btnThongTinCaNhan, 4);
         } else if (currentUser.isDoanhNghiep() || currentUser.isHR()) {
@@ -255,16 +255,7 @@ public class MainFrame extends JFrame {
         } else if (currentUser.isSinhVien()) {
             contentPanel.add(new SinhVienXemTinPanel(currentUser), CARD_SV_XEM_TIN);
 
-            contentPanel.add(createFeaturePlaceholderPanel(
-                    "CV CỦA TÔI",
-                    "Sinh viên quản lý hồ sơ CV cá nhân phục vụ quá trình ứng tuyển thực tập.",
-                    new String[]{
-                        "Xem danh sách CV cá nhân đã tạo trong hệ thống.",
-                        "Theo dõi CV chính được sử dụng khi ứng tuyển.",
-                        "Cập nhật kỹ năng, kinh nghiệm, mục tiêu nghề nghiệp trong CV.",
-                        "Chức năng upload file CV thật sẽ được mở rộng ở giai đoạn sau."
-                    }
-            ), CARD_SV_CV);
+            contentPanel.add(new QuanLyCVPanel(currentUser), CARD_SV_CV);
 
             contentPanel.add(createFeaturePlaceholderPanel(
                     "ỨNG TUYỂN CỦA TÔI",
@@ -685,8 +676,8 @@ public class MainFrame extends JFrame {
             btnXemTinTuyenDung.addActionListener(e -> showCard(CARD_SV_XEM_TIN, btnXemTinTuyenDung));
         }
 
-        if (btnCVCuaToi != null) {
-            btnCVCuaToi.addActionListener(e -> showCard(CARD_SV_CV, btnCVCuaToi));
+        if (btnQuanLyCV != null) {
+            btnQuanLyCV.addActionListener(e -> showCard(CARD_SV_CV, btnQuanLyCV));
         }
 
         if (btnUngTuyenCuaToi != null) {
