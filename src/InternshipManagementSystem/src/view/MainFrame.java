@@ -259,16 +259,8 @@ public class MainFrame extends JFrame {
 
             contentPanel.add(new UngTuyenCuaToiPanel(currentUser), CARD_SV_UNG_TUYEN);
 
-            contentPanel.add(createFeaturePlaceholderPanel(
-                    "THÔNG TIN CÁ NHÂN",
-                    "Sinh viên xem và cập nhật thông tin cá nhân phục vụ quá trình kết nối thực tập.",
-                    new String[]{
-                        "Xem mã sinh viên, họ tên, email, số điện thoại, ngành học và GPA.",
-                        "Cập nhật thông tin liên hệ để doanh nghiệp dễ dàng phản hồi.",
-                        "Theo dõi trạng thái thực tập hiện tại của sinh viên.",
-                        "Dữ liệu cá nhân sẽ liên kết với tài khoản sinh viên đang đăng nhập."
-                    }
-            ), CARD_SV_THONG_TIN);
+            contentPanel.add(new ThongTinCaNhanPanel(currentUser), CARD_SV_THONG_TIN);
+            
         } else if (currentUser.isDoanhNghiep() || currentUser.isHR()) {
             contentPanel.add(createFeaturePlaceholderPanel(
                     "TIN TUYỂN DỤNG CỦA TÔI",
