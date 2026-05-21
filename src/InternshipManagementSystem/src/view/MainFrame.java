@@ -266,16 +266,7 @@ public class MainFrame extends JFrame {
 
             contentPanel.add(new HoSoUngVienPanel(currentUser), CARD_DN_HO_SO_UNG_VIEN);
 
-            contentPanel.add(createFeaturePlaceholderPanel(
-                    "THÔNG TIN DOANH NGHIỆP",
-                    "Doanh nghiệp/HR xem và cập nhật thông tin đơn vị để tăng độ tin cậy khi kết nối với sinh viên.",
-                    new String[]{
-                        "Xem mã doanh nghiệp, tên doanh nghiệp, lĩnh vực hoạt động và thông tin liên hệ.",
-                        "Cập nhật mô tả doanh nghiệp, địa chỉ và người phụ trách tuyển dụng.",
-                        "Thông tin doanh nghiệp được hiển thị kèm các tin tuyển dụng.",
-                        "Dữ liệu hiện tại là dữ liệu mẫu phục vụ demo giao diện."
-                    }
-            ), CARD_DN_THONG_TIN);
+            contentPanel.add(new ThongTinDoanhNghiepPanel(currentUser), CARD_DN_THONG_TIN);
         }
     }
 
@@ -338,7 +329,7 @@ public class MainFrame extends JFrame {
         };
 
         return createDashboardPanel(
-                "Chào mừng đến với hệ thống quản lý thực tập",
+                "Chào mừng đến với Hệ thống quản lý thực tập và Kết nối doanh nghiệp",
                 "Hệ thống ghi nhận trạng thái vận hành ổn định",
                 "Chọn một chức năng ở thanh điều hướng để bắt đầu quản lý nghiệp vụ.",
                 cards,

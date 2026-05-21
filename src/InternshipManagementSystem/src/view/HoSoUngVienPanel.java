@@ -194,7 +194,7 @@ public class HoSoUngVienPanel extends JPanel {
         RoundedPanel detailCard = new RoundedPanel(24, COLOR_CARD);
         detailCard.setLayout(new BorderLayout());
         detailCard.setPreferredSize(new Dimension(360, 620));
-        detailCard.setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
+        detailCard.setBorder(BorderFactory.createEmptyBorder(18, 24, 18, 24));
 
         JLabel lblTitle = new JLabel("Chi tiết hồ sơ");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -202,7 +202,7 @@ public class HoSoUngVienPanel extends JPanel {
 
         JPanel infoPanel = new JPanel(new GridBagLayout());
         infoPanel.setOpaque(false);
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(18, 0, 18, 0));
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(8, 0, 10, 0));
 
         lblMaUngTuyen = createValueLabel();
         lblMaSinhVien = createValueLabel();
@@ -222,7 +222,7 @@ public class HoSoUngVienPanel extends JPanel {
         cboTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         cboTrangThai.setBackground(Color.WHITE);
         cboTrangThai.setForeground(COLOR_TEXT);
-        cboTrangThai.setPreferredSize(new Dimension(312, 38));
+        cboTrangThai.setPreferredSize(new Dimension(312, 34));
 
         addInfoRow(infoPanel, "Mã ứng tuyển", lblMaUngTuyen, 0);
         addInfoRow(infoPanel, "Mã sinh viên", lblMaSinhVien, 1);
@@ -567,7 +567,7 @@ public class HoSoUngVienPanel extends JPanel {
         label.setBackground(Color.decode("#F1F5F9"));
         label.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(COLOR_BORDER, 1),
-                BorderFactory.createEmptyBorder(8, 10, 8, 10)
+                BorderFactory.createEmptyBorder(6, 10, 6, 10)
         ));
         return label;
     }
@@ -582,11 +582,11 @@ public class HoSoUngVienPanel extends JPanel {
         gbc.gridy = row * 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        gbc.insets = new Insets(0, 0, 6, 0);
+        gbc.insets = new Insets(0, 0, 3, 0);
         panel.add(label, gbc);
 
         gbc.gridy = row * 2 + 1;
-        gbc.insets = new Insets(0, 0, 6, 0);
+        gbc.insets = new Insets(0, 0, 5, 0);
         panel.add(valueLabel, gbc);
     }
 

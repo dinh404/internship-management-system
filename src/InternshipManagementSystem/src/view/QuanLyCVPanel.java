@@ -218,8 +218,8 @@ public class QuanLyCVPanel extends JPanel {
 
         btnThem = createActionButton("Thêm", COLOR_TEAL, Color.WHITE);
         btnSua = createActionButton("Sửa", COLOR_NAVY, Color.WHITE);
-        btnXoa = createActionButton("Xóa", COLOR_GRAY_BUTTON, COLOR_DANGER);
-        btnLamMoi = createActionButton("Làm mới", COLOR_GRAY_BUTTON, COLOR_TEXT);
+        btnXoa = createActionButton("Xóa", COLOR_DANGER, Color.WHITE);
+        btnLamMoi = createActionButton("Làm mới", Color.decode("#E2E8F0"), COLOR_TEXT);
 
         buttonPanel.add(btnThem);
         buttonPanel.add(btnSua);

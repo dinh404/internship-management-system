@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -45,6 +46,10 @@ public class LoginFrame extends JFrame {
     private ExitButton btnExit;
     private JTextField lblMessage;
 
+    private JButton btnDemoAdmin;
+    private JButton btnDemoSinhVien;
+    private JButton btnDemoDoanhNghiep;
+
     private UnderlineInputPanel usernameInputPanel;
     private UnderlineInputPanel passwordInputPanel;
     private RoundedPanel badgePanel;
@@ -75,8 +80,8 @@ public class LoginFrame extends JFrame {
 
     private void initUI() {
         setTitle("Đăng nhập hệ thống");
-        setSize(450, 600);
-        setMinimumSize(new Dimension(450, 600));
+        setSize(500, 660);
+        setMinimumSize(new Dimension(500, 660));
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -87,8 +92,8 @@ public class LoginFrame extends JFrame {
 
         RoundedPanel cardPanel = new RoundedPanel(32, COLOR_CARD);
         cardPanel.setLayout(new GridBagLayout());
-        cardPanel.setBorder(BorderFactory.createEmptyBorder(32, 30, 26, 30));
-        cardPanel.setPreferredSize(new Dimension(370, 520));
+        cardPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 24, 30));
+        cardPanel.setPreferredSize(new Dimension(370, 560));
 
         JLabel lblTitle = new JLabel("IMEC");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 44));
@@ -100,7 +105,7 @@ public class LoginFrame extends JFrame {
         lblSubtitle.setForeground(COLOR_SLATE);
         lblSubtitle.setHorizontalAlignment(SwingConstants.CENTER);
 
-        lblMessage = new JTextField("Tài khoản chạy thử nghiệm: admin / 123456");
+        lblMessage = new JTextField("Sẵn sàng đăng nhập hệ thống");
         lblMessage.setFont(new Font("Segoe UI", Font.BOLD, 12));
         lblMessage.setForeground(COLOR_BADGE_TEXT);
         lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -134,6 +139,8 @@ public class LoginFrame extends JFrame {
         chkShowPassword = new JCheckBox("Hiện mật khẩu");
         chkShowPassword.setVisible(false);
 
+        JPanel demoRolePanel = createDemoRolePanel();
+
         btnLogin = new GradientButton("Đăng nhập", COLOR_GREEN_START, COLOR_GREEN_END);
         btnLogin.setPreferredSize(new Dimension(FORM_WIDTH, 56));
 
@@ -146,22 +153,59 @@ public class LoginFrame extends JFrame {
         exitPanel.add(btnExit, BorderLayout.EAST);
 
         addToCard(cardPanel, lblTitle, 0, new Insets(0, 0, 10, 0), GridBagConstraints.CENTER);
-        addToCard(cardPanel, lblSubtitle, 1, new Insets(0, 0, 34, 0), GridBagConstraints.CENTER);
+        addToCard(cardPanel, lblSubtitle, 1, new Insets(0, 0, 28, 0), GridBagConstraints.CENTER);
 
         addToCard(cardPanel, createLabel("Tên đăng nhập"), 2, new Insets(0, 0, 6, 0), GridBagConstraints.WEST);
-        addToCard(cardPanel, usernameInputPanel, 3, new Insets(0, 0, 18, 0), GridBagConstraints.CENTER);
+        addToCard(cardPanel, usernameInputPanel, 3, new Insets(0, 0, 16, 0), GridBagConstraints.CENTER);
 
         addToCard(cardPanel, createLabel("Mật khẩu"), 4, new Insets(0, 0, 6, 0), GridBagConstraints.WEST);
-        addToCard(cardPanel, passwordInputPanel, 5, new Insets(0, 0, 16, 0), GridBagConstraints.CENTER);
+        addToCard(cardPanel, passwordInputPanel, 5, new Insets(0, 0, 14, 0), GridBagConstraints.CENTER);
 
-        addToCard(cardPanel, badgePanel, 6, new Insets(0, 0, 26, 0), GridBagConstraints.CENTER);
-        addToCard(cardPanel, btnLogin, 7, new Insets(0, 0, 18, 0), GridBagConstraints.CENTER);
-        addToCard(cardPanel, exitPanel, 8, new Insets(0, 0, 0, 0), GridBagConstraints.CENTER);
+        addToCard(cardPanel, demoRolePanel, 6, new Insets(0, 0, 14, 0), GridBagConstraints.CENTER);
+        addToCard(cardPanel, badgePanel, 7, new Insets(0, 0, 18, 0), GridBagConstraints.CENTER);
+        addToCard(cardPanel, btnLogin, 8, new Insets(0, 0, 16, 0), GridBagConstraints.CENTER);
+        addToCard(cardPanel, exitPanel, 9, new Insets(0, 0, 0, 0), GridBagConstraints.CENTER);
 
         rootPanel.add(cardPanel);
         setContentPane(rootPanel);
 
         getRootPane().setDefaultButton(btnLogin);
+    }
+
+    private JPanel createDemoRolePanel() {
+        JPanel wrapper = new JPanel(new BorderLayout(0, 8));
+        wrapper.setOpaque(false);
+        wrapper.setPreferredSize(new Dimension(FORM_WIDTH, 62));
+
+        JLabel lblTitle = new JLabel("Đăng nhập nhanh theo vai trò");
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblTitle.setForeground(COLOR_SLATE);
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 8, 0));
+        buttonPanel.setOpaque(false);
+
+        btnDemoAdmin = createDemoRoleButton("Admin");
+        btnDemoSinhVien = createDemoRoleButton("Sinh viên");
+        btnDemoDoanhNghiep = createDemoRoleButton("Doanh nghiệp/HR");
+
+        buttonPanel.add(btnDemoAdmin);
+        buttonPanel.add(btnDemoSinhVien);
+        buttonPanel.add(btnDemoDoanhNghiep);
+
+        wrapper.add(lblTitle, BorderLayout.NORTH);
+        wrapper.add(buttonPanel, BorderLayout.CENTER);
+
+        return wrapper;
+    }
+
+    private JButton createDemoRoleButton(String text) {
+        DemoRoleButton button = new DemoRoleButton(text);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 10));
+        button.setForeground(Color.decode("#047857"));
+        button.setPreferredSize(new Dimension(96, 34));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return button;
     }
 
     private void addToCard(JPanel panel, java.awt.Component component, int row, Insets insets, int anchor) {
@@ -236,6 +280,17 @@ public class LoginFrame extends JFrame {
         });
 
         btnShowPassword.addActionListener(e -> togglePasswordVisibility());
+
+        btnDemoAdmin.addActionListener(e -> fillDemoAccount("admin", "123456", "Admin"));
+        btnDemoSinhVien.addActionListener(e -> fillDemoAccount("sv001", "123456", "Sinh viên"));
+        btnDemoDoanhNghiep.addActionListener(e -> fillDemoAccount("dn001", "123456", "Doanh nghiệp/HR"));
+    }
+
+    private void fillDemoAccount(String username, String password, String roleName) {
+        txtUsername.setText(username);
+        txtPassword.setText(password);
+        showInlineSuccess("Đã chọn vai trò: " + roleName);
+        txtPassword.requestFocus();
     }
 
     private void togglePasswordVisibility() {
@@ -515,6 +570,60 @@ public class LoginFrame extends JFrame {
 
             g2.dispose();
             super.paintComponent(graphics);
+        }
+    }
+
+    private static class DemoRoleButton extends JButton {
+
+        private boolean hovered = false;
+
+        public DemoRoleButton(String text) {
+            super(text);
+
+            setFocusPainted(false);
+            setBorderPainted(false);
+            setContentAreaFilled(false);
+
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    hovered = true;
+                    repaint();
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    hovered = false;
+                    repaint();
+                }
+            });
+        }
+
+        @Override
+        protected void paintComponent(Graphics graphics) {
+            Graphics2D g2 = (Graphics2D) graphics.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            Color bg = hovered ? Color.decode("#D1FAE5") : Color.decode("#ECFDF5");
+            Color border = hovered ? Color.decode("#10B981") : Color.decode("#BBF7D0");
+
+            g2.setColor(bg);
+            g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 16, 16);
+
+            g2.setColor(border);
+            g2.setStroke(new BasicStroke(1.2f));
+            g2.drawRoundRect(0, 0, getWidth() - 2, getHeight() - 2, 16, 16);
+
+            FontMetrics fm = g2.getFontMetrics(getFont());
+            String text = getText();
+            int textX = (getWidth() - fm.stringWidth(text)) / 2;
+            int textY = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
+
+            g2.setFont(getFont());
+            g2.setColor(getForeground());
+            g2.drawString(text, textX, textY);
+
+            g2.dispose();
         }
     }
 
