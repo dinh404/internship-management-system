@@ -253,16 +253,7 @@ public class MainFrame extends JFrame {
             contentPanel.add(wrapFrameContent(new UngTuyenFrame()), CARD_ADMIN_UNG_TUYEN);
             contentPanel.add(wrapFrameContent(new BaoCaoFrame()), CARD_ADMIN_BAO_CAO);
         } else if (currentUser.isSinhVien()) {
-            contentPanel.add(createFeaturePlaceholderPanel(
-                    "XEM TIN TUYỂN DỤNG",
-                    "Sinh viên xem danh sách vị trí thực tập đang mở, tìm kiếm cơ hội phù hợp và gửi hồ sơ ứng tuyển.",
-                    new String[]{
-                        "Tra cứu tin tuyển dụng theo vị trí, doanh nghiệp, địa điểm hoặc ngành nghề.",
-                        "Xem thông tin chi tiết về vị trí thực tập và yêu cầu tuyển dụng.",
-                        "Chọn CV phù hợp để gửi hồ sơ ứng tuyển vào vị trí mong muốn.",
-                        "Dữ liệu hiện tại sẽ sử dụng ArrayList mẫu trong giai đoạn demo."
-                    }
-            ), CARD_SV_XEM_TIN);
+            contentPanel.add(new SinhVienXemTinPanel(currentUser), CARD_SV_XEM_TIN);
 
             contentPanel.add(createFeaturePlaceholderPanel(
                     "CV CỦA TÔI",
