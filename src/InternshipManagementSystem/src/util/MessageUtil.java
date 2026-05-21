@@ -192,6 +192,8 @@ public class MessageUtil {
                     dispose();
                 });
 
+                getRootPane().setDefaultButton(btnYes);
+
                 OutlineButton btnNo = new OutlineButton("Hủy", COLOR_MUTED, COLOR_BORDER);
                 btnNo.setPreferredSize(new Dimension(96, 40));
                 btnNo.addActionListener(e -> {
@@ -212,6 +214,9 @@ public class MessageUtil {
                 GradientButton btnOk = new GradientButton("OK", COLOR_GREEN_START, COLOR_GREEN_END);
                 btnOk.setPreferredSize(new Dimension(126, 42));
                 btnOk.addActionListener(e -> dispose());
+
+                getRootPane().setDefaultButton(btnOk);
+
                 buttonPanel.add(btnOk);
             }
 
