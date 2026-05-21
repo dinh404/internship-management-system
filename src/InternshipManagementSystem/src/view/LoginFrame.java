@@ -31,6 +31,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import model.TaiKhoan;
 import service.AuthService;
 import util.MessageUtil;
 
@@ -265,11 +266,13 @@ public class LoginFrame extends JFrame {
             return;
         }
 
-        if (authService.login(username, password)) {
+        TaiKhoan taiKhoan = authService.login(username, password);
+
+        if (taiKhoan != null) {
             showInlineSuccess("Đăng nhập thành công!");
             MessageUtil.showInfo(this, "Đăng nhập thành công!");
 
-            MainFrame mainFrame = new MainFrame();
+            MainFrame mainFrame = new MainFrame(taiKhoan);
             mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             mainFrame.setVisible(true);
             dispose();
