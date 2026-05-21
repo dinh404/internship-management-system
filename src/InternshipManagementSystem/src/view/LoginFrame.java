@@ -89,17 +89,13 @@ public class LoginFrame extends JFrame {
         cardPanel.setBorder(BorderFactory.createEmptyBorder(32, 30, 26, 30));
         cardPanel.setPreferredSize(new Dimension(370, 520));
 
-        JLabel lblTitle = new JLabel(
-                "<html><center>"
-                + "<span style='color:#1E293B;'>HỆ THỐNG THỰC TẬP</span><br>"
-                + "<span style='color:#1E293B;'>&amp; KẾT NỐI DOANH NGHIỆP</span>"
-                + "</center></html>"
-        );
-        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 19));
+        JLabel lblTitle = new JLabel("IMEC");
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 44));
+        lblTitle.setForeground(COLOR_SLATE_DARK);
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JLabel lblSubtitle = new JLabel("Cất cánh sự nghiệp, vững bước tương lai");
-        lblSubtitle.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+        JLabel lblSubtitle = new JLabel("Quản lý thực tập và Kết nối doanh nghiệp");
+        lblSubtitle.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblSubtitle.setForeground(COLOR_SLATE);
         lblSubtitle.setHorizontalAlignment(SwingConstants.CENTER);
 
