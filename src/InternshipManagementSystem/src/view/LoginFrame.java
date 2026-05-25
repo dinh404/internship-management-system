@@ -49,6 +49,7 @@ public class LoginFrame extends JFrame {
     private JButton btnDemoAdmin;
     private JButton btnDemoSinhVien;
     private JButton btnDemoDoanhNghiep;
+    private JButton btnDemoPhongDaoTao;
 
     private UnderlineInputPanel usernameInputPanel;
     private UnderlineInputPanel passwordInputPanel;
@@ -80,8 +81,8 @@ public class LoginFrame extends JFrame {
 
     private void initUI() {
         setTitle("Đăng nhập hệ thống");
-        setSize(500, 660);
-        setMinimumSize(new Dimension(500, 660));
+        setSize(500, 700);
+        setMinimumSize(new Dimension(500, 700));
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -93,7 +94,7 @@ public class LoginFrame extends JFrame {
         RoundedPanel cardPanel = new RoundedPanel(32, COLOR_CARD);
         cardPanel.setLayout(new GridBagLayout());
         cardPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 24, 30));
-        cardPanel.setPreferredSize(new Dimension(370, 560));
+        cardPanel.setPreferredSize(new Dimension(370, 590));
 
         JLabel lblTitle = new JLabel("IMEC");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 44));
@@ -175,23 +176,25 @@ public class LoginFrame extends JFrame {
     private JPanel createDemoRolePanel() {
         JPanel wrapper = new JPanel(new BorderLayout(0, 8));
         wrapper.setOpaque(false);
-        wrapper.setPreferredSize(new Dimension(FORM_WIDTH, 62));
+        wrapper.setPreferredSize(new Dimension(FORM_WIDTH, 104));
 
         JLabel lblTitle = new JLabel("Đăng nhập nhanh theo vai trò");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 12));
         lblTitle.setForeground(COLOR_SLATE);
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 8, 0));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 8, 8));
         buttonPanel.setOpaque(false);
 
         btnDemoAdmin = createDemoRoleButton("Admin");
         btnDemoSinhVien = createDemoRoleButton("Sinh viên");
         btnDemoDoanhNghiep = createDemoRoleButton("Doanh nghiệp/HR");
+        btnDemoPhongDaoTao = createDemoRoleButton("Phòng Đào tạo");
 
         buttonPanel.add(btnDemoAdmin);
         buttonPanel.add(btnDemoSinhVien);
         buttonPanel.add(btnDemoDoanhNghiep);
+        buttonPanel.add(btnDemoPhongDaoTao);
 
         wrapper.add(lblTitle, BorderLayout.NORTH);
         wrapper.add(buttonPanel, BorderLayout.CENTER);
@@ -284,6 +287,7 @@ public class LoginFrame extends JFrame {
         btnDemoAdmin.addActionListener(e -> fillDemoAccount("admin", "123456", "Admin"));
         btnDemoSinhVien.addActionListener(e -> fillDemoAccount("sv001", "123456", "Sinh viên"));
         btnDemoDoanhNghiep.addActionListener(e -> fillDemoAccount("dn001", "123456", "Doanh nghiệp/HR"));
+        btnDemoPhongDaoTao.addActionListener(e -> fillDemoAccount("pdt001", "123456", "Phòng Đào tạo"));
     }
 
     private void fillDemoAccount(String username, String password, String roleName) {

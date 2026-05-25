@@ -74,4 +74,8 @@ public class TaiKhoan {
     public boolean isHR() {
         return "HR".equalsIgnoreCase(role);
     }
+
+    public boolean isPhongDaoTao() {
+        return "PHONG_DAO_TAO".equalsIgnoreCase(role);
+}
 }

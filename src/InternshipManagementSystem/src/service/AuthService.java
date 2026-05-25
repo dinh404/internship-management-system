@@ -45,6 +45,14 @@ public class AuthService {
                 "DN001",
                 "Nhân viên HR - Công ty ABC"
         ));
+
+        danhSachTaiKhoan.add(new TaiKhoan(
+                "pdt001",
+                "123456",
+                "PHONG_DAO_TAO",
+                "PDT001",
+                "Phòng Đào tạo"
+        ));
     }
 
     public TaiKhoan login(String username, String password) {
