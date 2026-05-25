@@ -234,15 +234,16 @@ public class MainFrame extends JFrame {
         addMenuButton(menuPanel, btnTongQuan, 0);
 
         if (currentUser.isAdmin()) {
-            btnSinhVien = createMenuButton("Quản lý sinh viên");
-            btnTinTuyenDung = createMenuButton("Quản lý tin tuyển dụng");
-            btnUngTuyen = createMenuButton("Quản lý ứng tuyển");
-            btnBaoCao = createMenuButton("Báo cáo thống kê");
+            btnTinTuyenDung = createMenuButton("Duyệt tin tuyển dụng");
+            btnSinhVien = createMenuButton("Quản lý doanh nghiệp");
+            btnUngTuyen = createMenuButton("Hỗ trợ & sự cố");
+            btnBaoCao = createMenuButton("Báo cáo hệ thống");
 
-            addMenuButton(menuPanel, btnSinhVien, 1);
-            addMenuButton(menuPanel, btnTinTuyenDung, 2);
+            addMenuButton(menuPanel, btnTinTuyenDung, 1);
+            addMenuButton(menuPanel, btnSinhVien, 2);
             addMenuButton(menuPanel, btnUngTuyen, 3);
             addMenuButton(menuPanel, btnBaoCao, 4);
+
         } else if (currentUser.isSinhVien()) {
             btnXemTinTuyenDung = createMenuButton("Xem tin tuyển dụng");
             btnQuanLyCV = createMenuButton("Quản lý CV");
@@ -289,7 +290,7 @@ public class MainFrame extends JFrame {
 
         if (currentUser.isAdmin()) {
             contentPanel.add(wrapFrameContent(new SinhVienFrame()), CARD_ADMIN_SINH_VIEN);
-            contentPanel.add(wrapFrameContent(new TinTuyenDungFrame()), CARD_ADMIN_TIN_TUYEN_DUNG);
+            contentPanel.add(new AdminDuyetTinTuyenDungPanel(currentUser), CARD_ADMIN_TIN_TUYEN_DUNG);
             contentPanel.add(wrapFrameContent(new UngTuyenFrame()), CARD_ADMIN_UNG_TUYEN);
             contentPanel.add(wrapFrameContent(new BaoCaoFrame()), CARD_ADMIN_BAO_CAO);
         } else if (currentUser.isSinhVien()) {
@@ -753,7 +754,7 @@ public class MainFrame extends JFrame {
         if (btnDanhGiaCuoiKy != null) {
             btnDanhGiaCuoiKy.addActionListener(e -> showCard(CARD_DN_DANH_GIA_CUOI_KY, btnDanhGiaCuoiKy));
         }
-        
+
         if (btnThongTinDoanhNghiep != null) {
             btnThongTinDoanhNghiep.addActionListener(e -> showCard(CARD_DN_THONG_TIN, btnThongTinDoanhNghiep));
         }
