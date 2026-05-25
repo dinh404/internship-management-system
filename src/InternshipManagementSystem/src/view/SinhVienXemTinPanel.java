@@ -4,7 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -15,20 +14,18 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.RenderingHints;
-import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -36,7 +33,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -73,7 +69,6 @@ public class SinhVienXemTinPanel extends JPanel {
     private JTextArea txtQuyenLoi;
 
     private JButton btnTimKiem;
-    private JButton btnXemTinDaLuu;
     private JButton btnXemChiTiet;
     private JButton btnLuuTin;
     private JButton btnUngTuyen;
@@ -83,7 +78,6 @@ public class SinhVienXemTinPanel extends JPanel {
     private final TinTuyenDungService tinTuyenDungService = new TinTuyenDungService();
     private final Set<String> danhSachMaTinDaUngTuyen = new HashSet<>();
     private final Set<String> danhSachMaTinDaLuu = new HashSet<>();
-    private boolean dangXemTinDaLuu = false;
 
     private final Color COLOR_BACKGROUND = Color.decode("#F8FAFC");
     private final Color COLOR_CARD = Color.decode("#FFFFFF");
@@ -96,8 +90,7 @@ public class SinhVienXemTinPanel extends JPanel {
     private final Color COLOR_ROW_SELECTED = Color.decode("#DBEAFE");
     private final Color COLOR_TABLE_HEADER = Color.decode("#1E3A8A");
     private final Color COLOR_GRAY_BUTTON = Color.decode("#E2E8F0");
-    private final Color COLOR_ORANGE = Color.decode("#F97316");
-    private final Color COLOR_PURPLE = Color.decode("#6D28D9");
+    private final Color COLOR_ORANGE = Color.decode("#C2410C");
 
     public SinhVienXemTinPanel(TaiKhoan currentUser) {
         this.currentUser = currentUser;
@@ -202,7 +195,7 @@ public class SinhVienXemTinPanel extends JPanel {
         buttonPanel.setOpaque(false);
 
         btnXemChiTiet = createActionButton("Xem chi tiết", COLOR_NAVY, Color.WHITE);
-        btnLuuTin = createActionButton("Lưu tin", COLOR_ORANGE, Color.WHITE);
+        btnLuuTin = createActionButton("Lưu tin", Color.decode("#F97316"), Color.WHITE);
         btnUngTuyen = createActionButton("Ứng tuyển", COLOR_TEAL, Color.WHITE);
         btnLamMoi = createActionButton("Làm mới", COLOR_GRAY_BUTTON, COLOR_TEXT);
 
@@ -238,12 +231,12 @@ public class SinhVienXemTinPanel extends JPanel {
 
         badgePanel.add(createBadge("Tin đang mở", lblTinDangMo, Color.decode("#EFF6FF"), COLOR_NAVY));
         badgePanel.add(createBadge("Tin phù hợp", lblTinPhuHop, Color.decode("#ECFDF5"), COLOR_TEAL));
-        badgePanel.add(createBadge("Đã ứng tuyển", lblDaUngTuyen, Color.decode("#FFEDD5"), Color.decode("#C2410C")));
-        badgePanel.add(createBadge("Đã lưu", lblDaLuu, Color.decode("#F5F3FF"), COLOR_PURPLE));
+        badgePanel.add(createBadge("Đã ứng tuyển", lblDaUngTuyen, Color.decode("#FFEDD5"), COLOR_ORANGE));
+        badgePanel.add(createBadge("Đã lưu", lblDaLuu, Color.decode("#F5F3FF"), Color.decode("#6D28D9")));
 
         JPanel searchPanel = new JPanel(new BorderLayout(0, 0));
         searchPanel.setOpaque(false);
-        searchPanel.setPreferredSize(new Dimension(520, 42));
+        searchPanel.setPreferredSize(new Dimension(420, 42));
 
         txtTuKhoa = new PlaceholderTextField("Nhập vị trí, doanh nghiệp, địa điểm, kỹ năng...");
         txtTuKhoa.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -255,19 +248,10 @@ public class SinhVienXemTinPanel extends JPanel {
         ));
 
         btnTimKiem = createActionButton("Tìm kiếm", COLOR_NAVY, Color.WHITE);
-        btnTimKiem.setPreferredSize(new Dimension(100, 42));
-
-        btnXemTinDaLuu = createActionButton("Tin đã lưu", COLOR_PURPLE, Color.WHITE);
-        btnXemTinDaLuu.setPreferredSize(new Dimension(110, 42));
-
-        JPanel searchButtonPanel = new JPanel(new GridLayout(1, 2, 8, 0));
-        searchButtonPanel.setOpaque(false);
-        searchButtonPanel.setPreferredSize(new Dimension(218, 42));
-        searchButtonPanel.add(btnTimKiem);
-        searchButtonPanel.add(btnXemTinDaLuu);
+        btnTimKiem.setPreferredSize(new Dimension(110, 42));
 
         searchPanel.add(txtTuKhoa, BorderLayout.CENTER);
-        searchPanel.add(searchButtonPanel, BorderLayout.EAST);
+        searchPanel.add(btnTimKiem, BorderLayout.EAST);
 
         GridBagConstraints topGbc = new GridBagConstraints();
 
@@ -350,11 +334,7 @@ public class SinhVienXemTinPanel extends JPanel {
         btnTimKiem.addActionListener(e -> handleTimKiem());
         txtTuKhoa.addActionListener(e -> handleTimKiem());
 
-        btnXemTinDaLuu.addActionListener(e -> handleXemTinDaLuu());
-
         btnLamMoi.addActionListener(e -> {
-            dangXemTinDaLuu = false;
-            btnXemTinDaLuu.setText("Tin đã lưu");
             txtTuKhoa.setText("");
             tblTinTuyenDung.clearSelection();
             clearDetail();
@@ -374,11 +354,7 @@ public class SinhVienXemTinPanel extends JPanel {
     }
 
     private void loadDataToTable() {
-        if (dangXemTinDaLuu) {
-            loadDataToTable(getDanhSachTinDaLuu());
-        } else {
-            loadDataToTable(tinTuyenDungService.getTinSinhVienCoTheXem());
-        }
+        loadDataToTable(tinTuyenDungService.getTinSinhVienCoTheXem());
     }
 
     private void loadDataToTable(List<TinTuyenDung> data) {
@@ -400,69 +376,14 @@ public class SinhVienXemTinPanel extends JPanel {
     }
 
     private void handleTimKiem() {
-        String keyword = txtTuKhoa.getText().trim().toLowerCase();
+        String keyword = txtTuKhoa.getText().trim();
 
         if (keyword.isEmpty()) {
             loadDataToTable();
             return;
         }
 
-        List<TinTuyenDung> source = dangXemTinDaLuu
-                ? getDanhSachTinDaLuu()
-                : tinTuyenDungService.getTinSinhVienCoTheXem();
-
-        List<TinTuyenDung> result = new ArrayList<>();
-
-        for (TinTuyenDung tin : source) {
-            String searchText = (
-                    tin.getMaTinTuyenDung() + " "
-                    + tin.getTenViTri() + " "
-                    + tin.getTenDoanhNghiep() + " "
-                    + tin.getDiaDiem() + " "
-                    + tin.getHanNop() + " "
-                    + tin.getMucLuong() + " "
-                    + tin.getTrangThai() + " "
-                    + tin.getMoTaCongViec() + " "
-                    + tin.getYeuCauKyNang() + " "
-                    + tin.getQuyenLoi() + " "
-                    + tin.getHinhThucLamViec() + " "
-                    + tin.getNganhPhuHop()
-            ).toLowerCase();
-
-            if (searchText.contains(keyword)) {
-                result.add(tin);
-            }
-        }
-
-        loadDataToTable(result);
-    }
-
-    private void handleXemTinDaLuu() {
-        if (!dangXemTinDaLuu && danhSachMaTinDaLuu.isEmpty()) {
-            MessageUtil.showInfo(this, "Bạn chưa lưu tin tuyển dụng nào.");
-            return;
-        }
-
-        dangXemTinDaLuu = !dangXemTinDaLuu;
-        btnXemTinDaLuu.setText(dangXemTinDaLuu ? "Tất cả tin" : "Tin đã lưu");
-        txtTuKhoa.setText("");
-        tblTinTuyenDung.clearSelection();
-        clearDetail();
-        loadDataToTable();
-    }
-
-    private List<TinTuyenDung> getDanhSachTinDaLuu() {
-        List<TinTuyenDung> result = new ArrayList<>();
-
-        for (String maTin : danhSachMaTinDaLuu) {
-            TinTuyenDung tin = tinTuyenDungService.getByMa(maTin);
-
-            if (tin != null) {
-                result.add(tin);
-            }
-        }
-
-        return result;
+        loadDataToTable(tinTuyenDungService.searchTinSinhVienCoTheXem(keyword));
     }
 
     private void handleLuuTin() {
@@ -482,7 +403,7 @@ public class SinhVienXemTinPanel extends JPanel {
 
         danhSachMaTinDaLuu.add(maTin);
         updateBadges();
-        MessageUtil.showInfo(this, "Đã lưu tin tuyển dụng. Bạn có thể xem lại bằng nút Tin đã lưu.");
+        MessageUtil.showInfo(this, "Đã lưu tin tuyển dụng để xem lại sau!");
     }
 
     private void handleUngTuyen() {
@@ -509,167 +430,67 @@ public class SinhVienXemTinPanel extends JPanel {
     }
 
     private void showUngTuyenDialog(TinTuyenDung tin) {
-        Window owner = SwingUtilities.getWindowAncestor(this);
-        JDialog dialog = new JDialog(owner, "Nộp hồ sơ ứng tuyển", Dialog.ModalityType.APPLICATION_MODAL);
-        dialog.setUndecorated(true);
-        dialog.setSize(560, 520);
-        dialog.setMinimumSize(new Dimension(560, 520));
-        dialog.setBackground(new Color(0, 0, 0, 0));
-        dialog.setContentPane(createUngTuyenDialogContent(dialog, tin));
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
-    }
-
-    private JPanel createUngTuyenDialogContent(JDialog dialog, TinTuyenDung tin) {
-        JPanel outer = new JPanel(new BorderLayout());
-        outer.setOpaque(false);
-        outer.setBorder(BorderFactory.createEmptyBorder(10, 10, 14, 14));
-
-        RoundedPanel card = new RoundedPanel(26, COLOR_CARD);
-        card.setLayout(new BorderLayout());
-        card.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
-
-        JPanel header = new JPanel(new BorderLayout());
-        header.setOpaque(true);
-        header.setBackground(COLOR_NAVY);
-        header.setPreferredSize(new Dimension(540, 64));
-        header.setBorder(BorderFactory.createEmptyBorder(0, 22, 0, 14));
-
-        JLabel lblTitle = new JLabel("Nộp hồ sơ ứng tuyển");
-        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 17));
-        lblTitle.setForeground(Color.WHITE);
-
-        JButton btnClose = new JButton("×");
-        btnClose.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        btnClose.setForeground(Color.WHITE);
-        btnClose.setFocusPainted(false);
-        btnClose.setBorderPainted(false);
-        btnClose.setContentAreaFilled(false);
-        btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnClose.addActionListener(e -> dialog.dispose());
-
-        header.add(lblTitle, BorderLayout.WEST);
-        header.add(btnClose, BorderLayout.EAST);
-
-        JPanel content = new JPanel(new GridBagLayout());
-        content.setOpaque(false);
-        content.setBorder(BorderFactory.createEmptyBorder(22, 26, 16, 26));
-
-        JLabel lblViTriValue = createDialogInfoLabel(tin.getTenViTri());
-        JLabel lblDoanhNghiepValue = createDialogInfoLabel(tin.getTenDoanhNghiep());
-        JLabel lblMucLuongValue = createDialogInfoLabel(tin.getMucLuong());
-
         JComboBox<String> cboCV = new JComboBox<>(new String[]{
             "CV Java Backend Intern",
             "CV Frontend Intern",
             "CV Data Analyst Intern",
             "Tải lên CV mới..."
         });
-        cboCV.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        cboCV.setForeground(COLOR_TEXT);
-        cboCV.setBackground(Color.WHITE);
-        cboCV.setBorder(BorderFactory.createLineBorder(COLOR_INPUT_BORDER, 1));
-        cboCV.setPreferredSize(new Dimension(320, 38));
 
-        JTextArea txtGhiChu = new JTextArea();
+        JTextArea txtGhiChu = new JTextArea(4, 26);
         txtGhiChu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         txtGhiChu.setLineWrap(true);
         txtGhiChu.setWrapStyleWord(true);
-        txtGhiChu.setForeground(COLOR_TEXT);
         txtGhiChu.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(COLOR_INPUT_BORDER, 1),
                 BorderFactory.createEmptyBorder(8, 10, 8, 10)
         ));
 
-        JScrollPane noteScroll = new JScrollPane(txtGhiChu);
-        noteScroll.setPreferredSize(new Dimension(320, 92));
-        noteScroll.setBorder(BorderFactory.createEmptyBorder());
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        addDialogRow(content, "Vị trí", lblViTriValue, 0);
-        addDialogRow(content, "Doanh nghiệp", lblDoanhNghiepValue, 1);
-        addDialogRow(content, "Phụ cấp", lblMucLuongValue, 2);
-        addDialogRow(content, "Chọn CV", cboCV, 3);
-        addDialogRow(content, "Ghi chú", noteScroll, 4);
+        addDialogRow(panel, "Vị trí", new JLabel(tin.getTenViTri()), 0);
+        addDialogRow(panel, "Doanh nghiệp", new JLabel(tin.getTenDoanhNghiep()), 1);
+        addDialogRow(panel, "Chọn CV", cboCV, 2);
+        addDialogRow(panel, "Ghi chú", new JScrollPane(txtGhiChu), 3);
 
-        JLabel lblHint = new JLabel(
-                "<html>"
-                + "<div style='line-height:150%; color:#64748B;'>"
-                + "Hồ sơ sẽ được gửi đến doanh nghiệp/HR. Trạng thái ứng tuyển có thể theo dõi tại mục <b>Ứng tuyển của tôi</b>."
-                + "</div>"
-                + "</html>"
+        int result = JOptionPane.showConfirmDialog(
+                this,
+                panel,
+                "Nộp hồ sơ ứng tuyển",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
         );
-        lblHint.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 
-        GridBagConstraints hintGbc = new GridBagConstraints();
-        hintGbc.gridx = 0;
-        hintGbc.gridy = 5;
-        hintGbc.gridwidth = 2;
-        hintGbc.fill = GridBagConstraints.HORIZONTAL;
-        hintGbc.weightx = 1.0;
-        hintGbc.insets = new Insets(4, 0, 0, 0);
-        content.add(lblHint, hintGbc);
+        if (result != JOptionPane.OK_OPTION) {
+            return;
+        }
 
-        JPanel footer = new JPanel(new GridLayout(1, 2, 12, 0));
-        footer.setOpaque(false);
-        footer.setBorder(BorderFactory.createEmptyBorder(0, 26, 0, 26));
-        footer.setPreferredSize(new Dimension(540, 44));
+        String selectedCV = cboCV.getSelectedItem().toString();
 
-        JButton btnSubmit = createActionButton("Nộp hồ sơ", COLOR_TEAL, Color.WHITE);
-        JButton btnCancel = createActionButton("Hủy", COLOR_GRAY_BUTTON, COLOR_TEXT);
+        if ("Tải lên CV mới...".equals(selectedCV)) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Chọn file CV");
 
-        footer.add(btnSubmit);
-        footer.add(btnCancel);
+            int chooseResult = fileChooser.showOpenDialog(this);
 
-        btnCancel.addActionListener(e -> dialog.dispose());
-
-        btnSubmit.addActionListener(e -> {
-            String selectedCV = cboCV.getSelectedItem().toString();
-
-            if ("Tải lên CV mới...".equals(selectedCV)) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Chọn file CV");
-
-                int chooseResult = fileChooser.showOpenDialog(dialog);
-
-                if (chooseResult != JFileChooser.APPROVE_OPTION) {
-                    MessageUtil.showInfo(this, "Bạn chưa chọn file CV để tải lên.");
-                    return;
-                }
-
-                File selectedFile = fileChooser.getSelectedFile();
-                selectedCV = selectedFile.getName();
+            if (chooseResult != JFileChooser.APPROVE_OPTION) {
+                MessageUtil.showInfo(this, "Bạn chưa chọn file CV để tải lên.");
+                return;
             }
 
-            danhSachMaTinDaUngTuyen.add(tin.getMaTinTuyenDung());
-            updateBadges();
-            dialog.dispose();
+            File selectedFile = fileChooser.getSelectedFile();
+            selectedCV = selectedFile.getName();
+        }
 
-            MessageUtil.showInfo(
-                    this,
-                    "Ứng tuyển thành công với CV: " + selectedCV
-                    + ". Hệ thống đã ghi nhận hồ sơ và gửi thông báo mô phỏng đến doanh nghiệp."
-            );
-        });
+        danhSachMaTinDaUngTuyen.add(tin.getMaTinTuyenDung());
+        updateBadges();
 
-        card.add(header, BorderLayout.NORTH);
-        card.add(content, BorderLayout.CENTER);
-        card.add(footer, BorderLayout.SOUTH);
-
-        outer.add(card, BorderLayout.CENTER);
-        return outer;
-    }
-
-    private JLabel createDialogInfoLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        label.setForeground(COLOR_TEXT);
-        label.setOpaque(true);
-        label.setBackground(Color.decode("#F8FAFC"));
-        label.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(COLOR_BORDER, 1),
-                BorderFactory.createEmptyBorder(8, 10, 8, 10)
-        ));
-        return label;
+        MessageUtil.showInfo(
+                this,
+                "Ứng tuyển thành công với CV: " + selectedCV
+                + ". Hệ thống đã ghi nhận hồ sơ và gửi thông báo mô phỏng đến doanh nghiệp."
+        );
     }
 
     private void addDialogRow(JPanel panel, String labelText, java.awt.Component component, int row) {
@@ -682,7 +503,7 @@ public class SinhVienXemTinPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = row;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets(0, 0, 12, 14);
+        gbc.insets = new Insets(0, 0, 12, 12);
         panel.add(label, gbc);
 
         gbc.gridx = 1;
@@ -724,11 +545,11 @@ public class SinhVienXemTinPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(txtDetail);
         scrollPane.setPreferredSize(new Dimension(560, 430));
 
-        javax.swing.JOptionPane.showMessageDialog(
+        JOptionPane.showMessageDialog(
                 this,
                 scrollPane,
                 "Chi tiết tin tuyển dụng",
-                javax.swing.JOptionPane.PLAIN_MESSAGE
+                JOptionPane.PLAIN_MESSAGE
         );
     }
 
