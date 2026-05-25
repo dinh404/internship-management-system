@@ -43,6 +43,9 @@ public class MainFrame extends JFrame {
     private static final String CARD_SV_UNG_TUYEN = "SV_UNG_TUYEN";
     private static final String CARD_SV_THONG_TIN = "SV_THONG_TIN";
 
+    private static final String CARD_SV_DANH_GIA_DN = "SV_DANH_GIA_DN";
+    private static final String CARD_SV_DIEN_DAN = "SV_DIEN_DAN";
+
     private static final String CARD_DN_TIN_CUA_TOI = "DN_TIN_CUA_TOI";
     private static final String CARD_DN_HO_SO_UNG_VIEN = "DN_HO_SO_UNG_VIEN";
     private static final String CARD_DN_THONG_TIN = "DN_THONG_TIN";
@@ -62,6 +65,9 @@ public class MainFrame extends JFrame {
     private SidebarButton btnQuanLyCV;
     private SidebarButton btnUngTuyenCuaToi;
     private SidebarButton btnThongTinCaNhan;
+
+    private SidebarButton btnDanhGiaDoanhNghiep;
+    private SidebarButton btnDienDanHoiDap;
 
     private SidebarButton btnTinCuaDoanhNghiep;
     private SidebarButton btnHoSoUngVien;
@@ -236,11 +242,16 @@ public class MainFrame extends JFrame {
             btnQuanLyCV = createMenuButton("Quản lý CV");
             btnUngTuyenCuaToi = createMenuButton("Ứng tuyển của tôi");
             btnThongTinCaNhan = createMenuButton("Thông tin cá nhân");
+            btnDanhGiaDoanhNghiep = createMenuButton("Đánh giá doanh nghiệp");
+            btnDienDanHoiDap = createMenuButton("Diễn đàn hỏi đáp");
 
             addMenuButton(menuPanel, btnXemTinTuyenDung, 1);
             addMenuButton(menuPanel, btnQuanLyCV, 2);
             addMenuButton(menuPanel, btnUngTuyenCuaToi, 3);
             addMenuButton(menuPanel, btnThongTinCaNhan, 4);
+            addMenuButton(menuPanel, btnDanhGiaDoanhNghiep, 5);
+            addMenuButton(menuPanel, btnDienDanHoiDap, 6);
+        
         } else if (currentUser.isDoanhNghiep() || currentUser.isHR()) {
             btnTinCuaDoanhNghiep = createMenuButton("Tin tuyển dụng của tôi");
             btnHoSoUngVien = createMenuButton("Hồ sơ ứng viên");
@@ -270,12 +281,12 @@ public class MainFrame extends JFrame {
             contentPanel.add(wrapFrameContent(new BaoCaoFrame()), CARD_ADMIN_BAO_CAO);
         } else if (currentUser.isSinhVien()) {
             contentPanel.add(new SinhVienXemTinPanel(currentUser), CARD_SV_XEM_TIN);
-
             contentPanel.add(new QuanLyCVPanel(currentUser), CARD_SV_CV);
-
             contentPanel.add(new UngTuyenCuaToiPanel(currentUser), CARD_SV_UNG_TUYEN);
-
             contentPanel.add(new ThongTinCaNhanPanel(currentUser), CARD_SV_THONG_TIN);
+            contentPanel.add(new DanhGiaDoanhNghiepPanel(currentUser), CARD_SV_DANH_GIA_DN);
+            contentPanel.add(new DienDanHoiDapPanel(currentUser), CARD_SV_DIEN_DAN);
+        
 
         } else if (currentUser.isDoanhNghiep() || currentUser.isHR()) {
             contentPanel.add(new TinTuyenDungCuaToiPanel(currentUser), CARD_DN_TIN_CUA_TOI);
@@ -633,7 +644,7 @@ public class MainFrame extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = row;
-        gbc.insets = new Insets(0, 0, 12, 0);
+        gbc.insets = new Insets(0, 0, 9, 0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
         menuPanel.add(button, gbc);
@@ -699,6 +710,14 @@ public class MainFrame extends JFrame {
         if (btnThongTinCaNhan != null) {
             btnThongTinCaNhan.addActionListener(e -> showCard(CARD_SV_THONG_TIN, btnThongTinCaNhan));
         }
+
+        if (btnDanhGiaDoanhNghiep != null) {
+            btnDanhGiaDoanhNghiep.addActionListener(e -> showCard(CARD_SV_DANH_GIA_DN, btnDanhGiaDoanhNghiep));
+        }
+
+        if (btnDienDanHoiDap != null) {
+            btnDienDanHoiDap.addActionListener(e -> showCard(CARD_SV_DIEN_DAN, btnDienDanHoiDap));
+}
 
         if (btnTinCuaDoanhNghiep != null) {
             btnTinCuaDoanhNghiep.addActionListener(e -> showCard(CARD_DN_TIN_CUA_TOI, btnTinCuaDoanhNghiep));
