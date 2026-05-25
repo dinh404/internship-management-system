@@ -289,10 +289,11 @@ public class MainFrame extends JFrame {
         contentPanel.add(createDashboardPanelByRole(), CARD_DASHBOARD);
 
         if (currentUser.isAdmin()) {
-            contentPanel.add(wrapFrameContent(new SinhVienFrame()), CARD_ADMIN_SINH_VIEN);
+            contentPanel.add(new AdminDoanhNghiepPanel(currentUser), CARD_ADMIN_SINH_VIEN);
             contentPanel.add(new AdminDuyetTinTuyenDungPanel(currentUser), CARD_ADMIN_TIN_TUYEN_DUNG);
-            contentPanel.add(wrapFrameContent(new UngTuyenFrame()), CARD_ADMIN_UNG_TUYEN);
+            contentPanel.add(new AdminHoTroSuCoPanel(currentUser), CARD_ADMIN_UNG_TUYEN);
             contentPanel.add(wrapFrameContent(new BaoCaoFrame()), CARD_ADMIN_BAO_CAO);
+
         } else if (currentUser.isSinhVien()) {
             contentPanel.add(new SinhVienXemTinPanel(currentUser), CARD_SV_XEM_TIN);
             contentPanel.add(new QuanLyCVPanel(currentUser), CARD_SV_CV);
