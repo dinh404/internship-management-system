@@ -289,16 +289,7 @@ public class MainFrame extends JFrame {
 
             contentPanel.add(new PdtDoanhNghiepLienKetPanel(currentUser), CARD_PDT_DOANH_NGHIEP);
 
-            contentPanel.add(createFeaturePlaceholderPanel(
-                    "THỐNG KÊ & BÁO CÁO",
-                    "Phòng Đào tạo xem các chỉ số tổng hợp về tình trạng thực tập và hiệu quả kết nối doanh nghiệp.",
-                    new String[]{
-                        "Thống kê tỷ lệ sinh viên đã có nơi thực tập và chưa có nơi thực tập.",
-                        "Thống kê số lượng sinh viên tại từng doanh nghiệp.",
-                        "Theo dõi tỷ lệ hồ sơ được nhận, bị từ chối hoặc đang chờ xử lý.",
-                        "Chuẩn bị dữ liệu phục vụ báo cáo tổng hợp cho Khoa hoặc Nhà trường."
-                    }
-            ), CARD_PDT_BAO_CAO);
+            contentPanel.add(new PdtBaoCaoThongKePanel(currentUser), CARD_PDT_BAO_CAO);
         }
     }
 
