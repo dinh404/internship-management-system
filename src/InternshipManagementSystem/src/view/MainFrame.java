@@ -287,16 +287,7 @@ public class MainFrame extends JFrame {
         }  else if (currentUser.isPhongDaoTao()) {
             contentPanel.add(new PdtSinhVienUngTuyenPanel(currentUser), CARD_PDT_SINH_VIEN_UNG_TUYEN);
 
-            contentPanel.add(createFeaturePlaceholderPanel(
-                    "DOANH NGHIỆP LIÊN KẾT",
-                    "Phòng Đào tạo quản lý và theo dõi các doanh nghiệp đang hợp tác trong hoạt động thực tập.",
-                    new String[]{
-                        "Xem danh sách doanh nghiệp liên kết với nhà trường.",
-                        "Theo dõi doanh nghiệp đang mở đợt tuyển dụng thực tập.",
-                        "Xem đánh giá của sinh viên sau quá trình thực tập.",
-                        "Hỗ trợ quyết định tiếp tục hợp tác hoặc xem xét lại chất lượng doanh nghiệp."
-                    }
-            ), CARD_PDT_DOANH_NGHIEP);
+            contentPanel.add(new PdtDoanhNghiepLienKetPanel(currentUser), CARD_PDT_DOANH_NGHIEP);
 
             contentPanel.add(createFeaturePlaceholderPanel(
                     "THỐNG KÊ & BÁO CÁO",
