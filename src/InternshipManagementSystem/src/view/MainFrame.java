@@ -285,16 +285,7 @@ public class MainFrame extends JFrame {
             contentPanel.add(new ThongTinDoanhNghiepPanel(currentUser), CARD_DN_THONG_TIN);
 
         }  else if (currentUser.isPhongDaoTao()) {
-            contentPanel.add(createFeaturePlaceholderPanel(
-                    "SINH VIÊN ỨNG TUYỂN",
-                    "Phòng Đào tạo theo dõi toàn bộ trạng thái ứng tuyển của sinh viên. Chức năng này chỉ cho phép xem dữ liệu, không thay đổi trạng thái hồ sơ.",
-                    new String[]{
-                        "Xem danh sách sinh viên đã ứng tuyển vào các vị trí thực tập.",
-                        "Theo dõi trạng thái hồ sơ: Đã nộp, Đã xem, Mời phỏng vấn, Đã nhận, Từ chối.",
-                        "Tra cứu sinh viên theo mã số, họ tên, ngành học, doanh nghiệp hoặc trạng thái.",
-                        "Hỗ trợ nhà trường phát hiện sinh viên chưa có nơi thực tập để kịp thời hỗ trợ."
-                    }
-            ), CARD_PDT_SINH_VIEN_UNG_TUYEN);
+            contentPanel.add(new PdtSinhVienUngTuyenPanel(currentUser), CARD_PDT_SINH_VIEN_UNG_TUYEN);
 
             contentPanel.add(createFeaturePlaceholderPanel(
                     "DOANH NGHIỆP LIÊN KẾT",
