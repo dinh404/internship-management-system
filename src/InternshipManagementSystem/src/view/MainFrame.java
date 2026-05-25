@@ -50,6 +50,7 @@ public class MainFrame extends JFrame {
     private static final String CARD_DN_HO_SO_UNG_VIEN = "DN_HO_SO_UNG_VIEN";
     private static final String CARD_DN_THONG_TIN = "DN_THONG_TIN";
     private static final String CARD_DN_LICH_PHONG_VAN = "DN_LICH_PHONG_VAN";
+    private static final String CARD_DN_THEO_DOI_THUC_TAP = "DN_THEO_DOI_THUC_TAP";
 
     private static final String CARD_PDT_SINH_VIEN_UNG_TUYEN = "PDT_SINH_VIEN_UNG_TUYEN";
     private static final String CARD_PDT_DOANH_NGHIEP = "PDT_DOANH_NGHIEP";
@@ -74,6 +75,7 @@ public class MainFrame extends JFrame {
     private SidebarButton btnHoSoUngVien;
     private SidebarButton btnThongTinDoanhNghiep;
     private SidebarButton btnLichPhongVan;
+    private SidebarButton btnTheoDoiThucTap;
 
     private SidebarButton btnPdtSinhVienUngTuyen;
     private SidebarButton btnPdtDoanhNghiep;
@@ -258,13 +260,14 @@ public class MainFrame extends JFrame {
             btnTinCuaDoanhNghiep = createMenuButton("Tin tuyển dụng của tôi");
             btnHoSoUngVien = createMenuButton("Hồ sơ ứng viên");
             btnLichPhongVan = createMenuButton("Lịch phỏng vấn");
+            btnTheoDoiThucTap = createMenuButton("Theo dõi thực tập");
             btnThongTinDoanhNghiep = createMenuButton("Thông tin doanh nghiệp");
 
             addMenuButton(menuPanel, btnTinCuaDoanhNghiep, 1);
             addMenuButton(menuPanel, btnHoSoUngVien, 2);
             addMenuButton(menuPanel, btnLichPhongVan, 3);
-            addMenuButton(menuPanel, btnThongTinDoanhNghiep, 4);
-
+            addMenuButton(menuPanel, btnTheoDoiThucTap, 4);
+            addMenuButton(menuPanel, btnThongTinDoanhNghiep, 5);
 
         } else if (currentUser.isPhongDaoTao()) {
             btnPdtSinhVienUngTuyen = createMenuButton("Sinh viên ứng tuyển");
@@ -298,6 +301,7 @@ public class MainFrame extends JFrame {
             contentPanel.add(new TinTuyenDungCuaToiPanel(currentUser), CARD_DN_TIN_CUA_TOI);
             contentPanel.add(new HoSoUngVienPanel(currentUser), CARD_DN_HO_SO_UNG_VIEN);
             contentPanel.add(new LichPhongVanPanel(currentUser), CARD_DN_LICH_PHONG_VAN);
+            contentPanel.add(new TheoDoiThucTapPanel(currentUser), CARD_DN_THEO_DOI_THUC_TAP);
             contentPanel.add(new ThongTinDoanhNghiepPanel(currentUser), CARD_DN_THONG_TIN);
 
 
@@ -737,6 +741,9 @@ public class MainFrame extends JFrame {
             btnLichPhongVan.addActionListener(e -> showCard(CARD_DN_LICH_PHONG_VAN, btnLichPhongVan));
 }
 
+        if (btnTheoDoiThucTap != null) {
+             btnTheoDoiThucTap.addActionListener(e -> showCard(CARD_DN_THEO_DOI_THUC_TAP, btnTheoDoiThucTap));
+}
         if (btnThongTinDoanhNghiep != null) {
             btnThongTinDoanhNghiep.addActionListener(e -> showCard(CARD_DN_THONG_TIN, btnThongTinDoanhNghiep));
         }
