@@ -47,6 +47,10 @@ public class MainFrame extends JFrame {
     private static final String CARD_DN_HO_SO_UNG_VIEN = "DN_HO_SO_UNG_VIEN";
     private static final String CARD_DN_THONG_TIN = "DN_THONG_TIN";
 
+    private static final String CARD_PDT_SINH_VIEN_UNG_TUYEN = "PDT_SINH_VIEN_UNG_TUYEN";
+    private static final String CARD_PDT_DOANH_NGHIEP = "PDT_DOANH_NGHIEP";
+    private static final String CARD_PDT_BAO_CAO = "PDT_BAO_CAO";
+
     private SidebarButton btnTongQuan;
 
     private SidebarButton btnSinhVien;
@@ -62,6 +66,10 @@ public class MainFrame extends JFrame {
     private SidebarButton btnTinCuaDoanhNghiep;
     private SidebarButton btnHoSoUngVien;
     private SidebarButton btnThongTinDoanhNghiep;
+
+    private SidebarButton btnPdtSinhVienUngTuyen;
+    private SidebarButton btnPdtDoanhNghiep;
+    private SidebarButton btnPdtBaoCao;
 
     private JButton btnDangXuat;
 
@@ -241,6 +249,14 @@ public class MainFrame extends JFrame {
             addMenuButton(menuPanel, btnTinCuaDoanhNghiep, 1);
             addMenuButton(menuPanel, btnHoSoUngVien, 2);
             addMenuButton(menuPanel, btnThongTinDoanhNghiep, 3);
+        } else if (currentUser.isPhongDaoTao()) {
+            btnPdtSinhVienUngTuyen = createMenuButton("Sinh viên ứng tuyển");
+            btnPdtDoanhNghiep = createMenuButton("Doanh nghiệp liên kết");
+            btnPdtBaoCao = createMenuButton("Thống kê & báo cáo");
+
+            addMenuButton(menuPanel, btnPdtSinhVienUngTuyen, 1);
+            addMenuButton(menuPanel, btnPdtDoanhNghiep, 2);
+            addMenuButton(menuPanel, btnPdtBaoCao, 3);
         }
     }
 
@@ -267,6 +283,40 @@ public class MainFrame extends JFrame {
             contentPanel.add(new HoSoUngVienPanel(currentUser), CARD_DN_HO_SO_UNG_VIEN);
 
             contentPanel.add(new ThongTinDoanhNghiepPanel(currentUser), CARD_DN_THONG_TIN);
+
+        }  else if (currentUser.isPhongDaoTao()) {
+            contentPanel.add(createFeaturePlaceholderPanel(
+                    "SINH VIÊN ỨNG TUYỂN",
+                    "Phòng Đào tạo theo dõi toàn bộ trạng thái ứng tuyển của sinh viên. Chức năng này chỉ cho phép xem dữ liệu, không thay đổi trạng thái hồ sơ.",
+                    new String[]{
+                        "Xem danh sách sinh viên đã ứng tuyển vào các vị trí thực tập.",
+                        "Theo dõi trạng thái hồ sơ: Đã nộp, Đã xem, Mời phỏng vấn, Đã nhận, Từ chối.",
+                        "Tra cứu sinh viên theo mã số, họ tên, ngành học, doanh nghiệp hoặc trạng thái.",
+                        "Hỗ trợ nhà trường phát hiện sinh viên chưa có nơi thực tập để kịp thời hỗ trợ."
+                    }
+            ), CARD_PDT_SINH_VIEN_UNG_TUYEN);
+
+            contentPanel.add(createFeaturePlaceholderPanel(
+                    "DOANH NGHIỆP LIÊN KẾT",
+                    "Phòng Đào tạo quản lý và theo dõi các doanh nghiệp đang hợp tác trong hoạt động thực tập.",
+                    new String[]{
+                        "Xem danh sách doanh nghiệp liên kết với nhà trường.",
+                        "Theo dõi doanh nghiệp đang mở đợt tuyển dụng thực tập.",
+                        "Xem đánh giá của sinh viên sau quá trình thực tập.",
+                        "Hỗ trợ quyết định tiếp tục hợp tác hoặc xem xét lại chất lượng doanh nghiệp."
+                    }
+            ), CARD_PDT_DOANH_NGHIEP);
+
+            contentPanel.add(createFeaturePlaceholderPanel(
+                    "THỐNG KÊ & BÁO CÁO",
+                    "Phòng Đào tạo xem các chỉ số tổng hợp về tình trạng thực tập và hiệu quả kết nối doanh nghiệp.",
+                    new String[]{
+                        "Thống kê tỷ lệ sinh viên đã có nơi thực tập và chưa có nơi thực tập.",
+                        "Thống kê số lượng sinh viên tại từng doanh nghiệp.",
+                        "Theo dõi tỷ lệ hồ sơ được nhận, bị từ chối hoặc đang chờ xử lý.",
+                        "Chuẩn bị dữ liệu phục vụ báo cáo tổng hợp cho Khoa hoặc Nhà trường."
+                    }
+            ), CARD_PDT_BAO_CAO);
         }
     }
 
@@ -308,6 +358,10 @@ public class MainFrame extends JFrame {
 
         if (currentUser.isDoanhNghiep() || currentUser.isHR()) {
             return createEnterpriseDashboardPanel();
+        }
+
+        if (currentUser.isPhongDaoTao()) {
+            return createTrainingDashboardPanel();
         }
 
         return createAdminDashboardPanel();
@@ -387,6 +441,31 @@ public class MainFrame extends JFrame {
                 guideLines
         );
     }
+
+    private JPanel createTrainingDashboardPanel() {
+        String[][] cards = {
+            {"Sinh viên", "128", "Đang theo dõi thực tập"},
+            {"Đã có nơi TT", "86", "Sinh viên đã được nhận"},
+            {"Chưa có nơi TT", "42", "Cần hỗ trợ kết nối"},
+            {"Doanh nghiệp", "24", "Đối tác liên kết"}
+        };
+
+        String[] guideLines = {
+            "Theo dõi trạng thái ứng tuyển của sinh viên theo từng vị trí thực tập.",
+            "Xem danh sách doanh nghiệp đang hợp tác và các đợt tuyển dụng đang mở.",
+            "Đọc đánh giá doanh nghiệp từ sinh viên sau kỳ thực tập.",
+            "Xem báo cáo tỷ lệ sinh viên đã có nơi thực tập và chưa có nơi thực tập."
+        };
+
+        return createDashboardPanel(
+                "Chào mừng " + currentUser.getTenHienThi(),
+                "Theo dõi thực tập, doanh nghiệp liên kết và báo cáo tổng hợp",
+                "Vai trò này chủ yếu theo dõi dữ liệu và tổng hợp báo cáo.",
+                cards,
+                "Luồng thao tác dành cho Phòng Đào tạo",
+                guideLines
+        );
+}
 
     private JPanel createDashboardPanel(String welcomeText, String subtitle, String hint,
             String[][] cards, String guideTitle, String[] guideLines) {
@@ -604,6 +683,10 @@ public class MainFrame extends JFrame {
             return "Doanh nghiệp";
         }
 
+        if (currentUser.isPhongDaoTao()) {
+            return "Phòng Đào tạo";
+        }
+
         return "Người dùng";
     }
 
@@ -654,6 +737,18 @@ public class MainFrame extends JFrame {
 
         if (btnThongTinDoanhNghiep != null) {
             btnThongTinDoanhNghiep.addActionListener(e -> showCard(CARD_DN_THONG_TIN, btnThongTinDoanhNghiep));
+        }
+
+        if (btnPdtSinhVienUngTuyen != null) {
+        btnPdtSinhVienUngTuyen.addActionListener(e -> showCard(CARD_PDT_SINH_VIEN_UNG_TUYEN, btnPdtSinhVienUngTuyen));
+        }
+
+        if (btnPdtDoanhNghiep != null) {
+            btnPdtDoanhNghiep.addActionListener(e -> showCard(CARD_PDT_DOANH_NGHIEP, btnPdtDoanhNghiep));
+        }
+
+        if (btnPdtBaoCao != null) {
+            btnPdtBaoCao.addActionListener(e -> showCard(CARD_PDT_BAO_CAO, btnPdtBaoCao));
         }
 
         btnDangXuat.addActionListener(e -> {
